@@ -6,7 +6,7 @@ CREATE TABLE users (
   username VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   profile_url VARCHAR(255),
-  descprition TEXT,
+  profile_description TEXT,
   password_hash VARCHAR(255) NOT NULL,
   last_modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
