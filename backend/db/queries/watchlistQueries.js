@@ -20,6 +20,16 @@ const getWatchlistById = async id => {
   }
 };
 
+const getWatchlistByUserId = async userId => {
+  try {
+    const data = await db.query("SELECT * FROM watchlists WHERE user_id = $1;", [userId]);
+    return data.rows;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const getWatchlistMoviesByUserId = async userId => {
   try {
     const data = await db.query("SELECT movie_id FROM watchlists WHERE user_id = $1;", [userId]);
@@ -43,4 +53,4 @@ const createWatchlist = async (movieId, userId) => {
   }
 }
 
-module.exports = { getAllWatchlists, getWatchlistById, getWatchlistMoviesByUserId, createWatchlist };
+module.exports = { getAllWatchlists, getWatchlistById, getWatchlistMoviesByUserId, createWatchlist, getWatchlistByUserId };
