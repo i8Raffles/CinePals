@@ -4,25 +4,6 @@ const config = require('../config');
 
 const router = express.Router();
 
-// const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
-// const options = {
-//   headers: {
-//     accept: 'application/json',
-//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0MzU3MzU1ODI5NzljM2FiMzk1ZDVhMzc4YmU0MmQzNiIsInN1YiI6IjY0YTc1NjM2NjVjMjZjMDEwY2U0MWEwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.71IxAhKPttcGu3sUPrakws0_qdLVPD-ZFMPRAgKTpXM',
-//   },
-// };
-
-// router.get('/fetchApi', (req, res) => {
-//   axios.get(url, options)
-//     .then(response => {
-//       res.json(response.data);
-//     })
-//     .catch(error => {
-//       console.error('Error fetching data:', error);
-//       res.status(500).json({ error: 'Error fetching data' });
-//     });
-// }); 
-
 router.get('/movies_popular/:page', async (req, res) => {
   const { page } = req.params;
 
