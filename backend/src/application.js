@@ -13,6 +13,7 @@ const db = require("./db");
 const reviews = require("./routes/reviews");
 const users = require("./routes/users");
 const watchlists = require("./routes/watchlists");
+const movies = require("./routes/movies");
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -40,6 +41,7 @@ module.exports = function application(
   app.use("/api", reviews(db));
   app.use("/api", users(db));
   app.use("/api", watchlists(db));
+  app.use("/api", movies(db));
   
 
   if (ENV === "development" || ENV === "test") {
