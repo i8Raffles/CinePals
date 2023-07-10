@@ -14,6 +14,7 @@ const reviews = require("./routes/reviews");
 const users = require("./routes/users");
 const watchlists = require("./routes/watchlists");
 const movies = require("./routes/movies");
+const fetchApi = require('./routes/api_fetch');
 
 function read(file) {
   return new Promise((resolve, reject) => {
@@ -42,7 +43,7 @@ module.exports = function application(
   app.use("/api", users(db));
   app.use("/api", watchlists(db));
   app.use("/api", movies(db));
-  
+  app.use(fetchApi);
 
   if (ENV === "development" || ENV === "test") {
     Promise.all([
