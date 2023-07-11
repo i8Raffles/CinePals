@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS watchlists;
 
 CREATE TABLE watchlists (
   id SERIAL PRIMARY KEY NOT NULL,
-    movie_id INTEGER NOT NULL,
+  movie_id INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   UNIQUE (user_id, movie_id)
