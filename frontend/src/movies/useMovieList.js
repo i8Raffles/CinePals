@@ -9,13 +9,13 @@ function useMovieList() {
 
     useEffect(() => {
         const options = {method: 'GET', headers: {accept: 'application/json', authorization: 'Bearer ' + TOKEN}};
-        fetch(movieApiBuilder(state.filter), options)
+        fetch(movieApiBuilder(state.filter, state.page), options)
             .then(res => res.json())
             .then(json => {
                 dispatch({ type: ACTION_TYPES.FETCH, payload: json.results });
             })
             .catch(err => console.log);
-    }, [state.filter]);
+    }, [state.filter, state.page]);
 
     return {state, dispatch};
 }

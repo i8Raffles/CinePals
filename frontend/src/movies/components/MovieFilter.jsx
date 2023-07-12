@@ -2,12 +2,13 @@ import {
     Box,
     Button,
     Chip,
-    Fade,
+    Fade, Paper,
     Popper,
     Stack,
 } from "@mui/material";
 import {useState} from "react";
 import {FILTER_TYPES} from "../../utils/movieApiBuilder";
+import {genresList} from "../../utils/genres";
 
 function MovieFilter(props) {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -26,44 +27,27 @@ function MovieFilter(props) {
 
     const renderGenres = () => {
         return (
-            <Stack direction="row" spacing={1}>
-                <Chip
+            <Paper elevation={6} sx={{ display: 'flex',
+                p: 2,
+                gap: 1,
+                width: '72%',
+                minWidth: 520,
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+            }}>
+                {genresList.map(genres => (<Chip
+                    sx={{
+                        color: props.current === genres.id ? 'inherit' : 'rgba(0, 0, 0, 0.87)',
+                        bgcolor: props.current === genres.id ? 'rgb(25, 118, 210)' : 'inherit'
+                    }}
+                    key={genres.id}
                     size="small"
                     variant="outlined"
-                    onClick={onClick}
-                    label="Action"
-                />
-                <Chip
-                    size="small"
-                    variant="outlined"
-                    onClick={onClick}
-                    label="Adventure"
-                />
-                <Chip
-                    size="small"
-                    variant="outlined"
-                    onClick={onClick}
-                    label="Animation"
-                />
-                <Chip
-                    size="small"
-                    variant="outlined"
-                    onClick={onClick}
-                    label="Comedy"
-                />
-                <Chip
-                    size="small"
-                    variant="outlined"
-                    onClick={onClick}
-                    label="Romance"
-                />
-                <Chip
-                    size="small"
-                    variant="outlined"
-                    onClick={onClick}
-                    label="History"
-                />
-            </Stack>
+                    color={props.current === genres.id ? "primary" : "secondary"}
+                    onClick={() => onClick(genres.id)}
+                    label={genres.name}
+                />))}
+            </Paper>
         );
     };
 
@@ -107,7 +91,7 @@ function MovieFilter(props) {
                     onClick={() => onClick(FILTER_TYPES.UPCOMING)}
                     label="Upcoming"
                 />
-                <Button m={2} onClick={openGenre("right")}>
+                <Button m={2} variant={!!genresList.find(g => g.id === props.current) ? 'outlined' : 'text'} onClick={openGenre("right-start")}>
                     By genre
                 </Button>
             </Stack>
