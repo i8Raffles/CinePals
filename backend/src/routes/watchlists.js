@@ -16,7 +16,7 @@ module.exports = db => {
   //GET all watchlists
   router.get("/watchlists", async (request, response) => {
     try {
-      const watchlists = await db.query("SELECT * FROM watchlists;");
+      const watchlists = await db.query("SELECT movie_id FROM watchlists;");
       response.json(watchlists.rows);
     } catch (error) {
       console.error(error);
