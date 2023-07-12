@@ -69,5 +69,25 @@ module.exports = db => {
     }
   });
 
+  // EDIT an existing review
+  router.put("/reviews/:id/edit", async (request, response) => {
+    const { id } = request.params;
+    const { rating, review } = request.body;
+    try {
+      const updatedReview = await db.query(
+        "UPDATE reviews SET rating = $1, review = $2, last_modified_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *;",
+        [rating, review, id]
+      );
+      if (updatedReview.rows.length === 0) {
+        response.status(404).json({ error: "Review not found." });
+      } else {
+        response.json(updatedReview.rows[0]);
+      }
+    } catch (error) {
+      console.error(error);
+      response.status(500).json({ error: "An error occurred." });
+    }
+  });
+
   return router;
 };
