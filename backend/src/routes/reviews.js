@@ -1,4 +1,7 @@
 const router = require("express").Router();
+const axios = require('axios');
+const config = require('../config');
+
 module.exports = db => {
   // router.get("/reviews", (request, response) => {
   //   db.query(`
@@ -25,7 +28,7 @@ module.exports = db => {
       response.status(500).json({ error: "An error occurred." });
     }
   });
-  
+
   // GET all reviews by userId
   router.get("/reviews/user/:userId", async (request, response) => {
     const { userId } = request.params;
@@ -66,6 +69,50 @@ module.exports = db => {
     } catch (error) {
       console.error(error);
       response.status(500).json({ error: "An error occurred." });
+    }
+  });
+
+  // POST a new review and add movie to database???
+  router.post('/reviews', async (req, res) => {
+    // Extract the necessary data from the request body
+    const { movieId, userId, rating, reviewText } = req.body;
+  
+    const options = {
+      method: 'GET',
+      url: `https://api.themoviedb.org/3/movie/${movieId}`,
+      params: {
+        language: 'en-US',
+      },
+      headers: {
+        accept: config.api.accept,
+        Authorization: config.api.authorization,
+      },
+    };
+  
+    try {
+      const movieResponse = await axios.request(options);
+  
+      // Extract the relevant information from the API response
+      const { id, original_title, title, overview, poster_path, vote_average, release_date } = movieResponse.data;
+  
+      // Prepend the base URL to the poster path
+      const fullPosterPath = `https://image.tmdb.org/t/p/w300${poster_path}`;
+  
+      // Save the extracted information to the database
+      const savedReview = await db.query(
+        'INSERT INTO reviews (movie_id, user_id, rating, review) VALUES ($1, $2, $3, $4) RETURNING *',
+        [movieId, userId, rating, reviewText]
+      );
+  
+      const savedMovie = await db.query(
+        'INSERT INTO movies (movie_id, original_title, title, overview, poster_path, vote_average, release_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+        [id, original_title, title, overview, fullPosterPath, vote_average, release_date]
+      );
+  
+      res.status(201).json({ review: savedReview.rows[0], movie: savedMovie.rows[0] });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred.' });
     }
   });
 
