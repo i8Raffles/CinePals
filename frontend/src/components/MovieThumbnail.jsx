@@ -11,13 +11,13 @@ import {
 } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
-import {red} from "@mui/material/colors";
+import {deepOrange, red} from "@mui/material/colors";
 import { Link } from "react-router-dom";
 
 function MovieThumbnail(props) {
     return <Card sx={{
         minWidth: 120, maxWidth: 240,
-        overflow: 'auto',
+        overflow: 'hidden',
         flexGrow: 1, flexShrink: 0,
         width: '15%', flexBasis: 'auto' }}>
         <CardHeader sx={{ whiteSpace: 'nowrap' }} avatar={
@@ -43,6 +43,7 @@ function MovieThumbnail(props) {
             <Rating value={props.movie.rating / 2} readOnly
                     precision={0.1}
                     emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />} />
+            <Avatar sx={{ width: 30, height: 30, bgcolor: deepOrange[500], fontSize: 14, ml: 1 }}>{props.movie.rating}</Avatar>
         </CardActions>
     </Card>
 }

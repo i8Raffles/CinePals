@@ -20,6 +20,7 @@ function MovieList(props) {
         <Box
           sx={{
             mt: 2,
+            pb: 2,
             display: "flex",
             flexWrap: "wrap",
             gap: 2,
