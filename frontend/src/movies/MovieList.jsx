@@ -23,14 +23,13 @@ function MovieList(props) {
             pb: 2,
             display: "flex",
             flexWrap: "wrap",
-            gap: 2,
             overflow: "auto",
             flexGrow: 1,
             flexShrink: 0,
           }}
         >
           {state.movies.map((m) => (
-            <MovieThumbnail
+            <Box sx={{ width: '20%', p: 1 }}><MovieThumbnail
               key={m.id}
               movie={{
                 id: m.id,
@@ -40,7 +39,7 @@ function MovieList(props) {
                 poster: IMAGE_BASE_URL + m.poster_path,
                 rating: m.vote_average,
               }}
-            />
+            /></Box>
           ))}
         </Box>
       </Box>
