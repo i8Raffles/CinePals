@@ -36,7 +36,6 @@ const useMyMovies = () => {
     try {
       console.log("state.movies: ", state.movies);
       await axios.delete(`/api/watchlists/${userId}/${movieId}`);
-      // Optionally, you can update the state after successful deletion
       const updatedMovies = state.movies.filter((movie) => movie.movie_id !== movieId);
       console.log("updatedMovies", updatedMovies);
       setState({
