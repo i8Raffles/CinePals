@@ -4,13 +4,13 @@ const theme = createTheme({
     palette: {
       primary: {
         // Purple and green play nicely together.
-        main: '#42a5f5',
-        // contrastText: '#ffcc00',
+        main: 'rgb(25, 118, 210)',
+        contrastText: 'rgb(255, 255, 255)',
       },
       secondary: {
         // This is green.A700 as hex.
-        main: '#f5f5f5',
-        // contrastText: '#ffcc00',
+        main: 'rgba(0, 0, 0, 0.08)',
+        contrastText: 'rgba(0, 0, 0, 0.87)',
       },
     },
     // contrastThreshold: 4.5,
