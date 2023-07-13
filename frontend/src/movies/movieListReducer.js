@@ -4,7 +4,8 @@ export const defaultState = {
     movies: [],
     isLoading: false,
     error: false,
-    filter: FILTER_TYPES.POPULAR
+    filter: FILTER_TYPES.POPULAR,
+    page: 1,
 }
 
 export const ACTION_TYPES = {
@@ -22,7 +23,8 @@ export function movieListReducer(state, action) {
         case ACTION_TYPES.FILTER_CHANGE:
             return {
                 ...state,
-                filter: action.payload
+                filter: action.payload,
+                page: 1,
             };
         default: return state;
     }
