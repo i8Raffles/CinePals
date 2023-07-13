@@ -25,15 +25,20 @@ module.exports = db => {
   });
 
   // GET watchlist by user ID
-  router.get("/watchlists/user/:userId", async (request, response) => {
+  router.get("/users/:userId/watchlists", (request, response) => {
     const { userId } = request.params;
-    try {
-      const watchlist = await db.query("SELECT * FROM watchlists WHERE user_id = $1;", [userId]);
-      response.json(watchlist.rows);
-    } catch (error) {
-      console.error(error);
-      response.status(500).json({ error: "An error occurred." });
-    }
+  
+    db.query(`
+      SELECT *
+      FROM movies
+      WHERE movie_id IN (
+        SELECT movie_id
+        FROM watchlists
+        WHERE user_id = $1
+      )
+    `, [userId]).then(({ rows: watchlists }) => {
+      response.json(watchlists);
+    });
   });
 
   // POST new movie to watchlist
@@ -52,9 +57,9 @@ module.exports = db => {
   });
 
   // POST add a movie to the watchlist and save to database???
-  router.post('/watchlist', async (req, res) => {
+  router.post('/users/:userId/watchlist/movies/:movieId', async (req, res) => {
     // Extract the necessary data from the request body
-    const { movieId, userId } = req.body;
+    const { movieId, userId } = req.params;
 
     const options = {
       method: 'GET',
@@ -96,18 +101,18 @@ module.exports = db => {
   });
 
   // DELETE watchlist movie
-  router.delete("/watchlists/:id", async (request, response) => {
-    const { id } = request.params;
+  router.delete('/users/:userId/watchlist/:movieId', async (req, res) => {
+    const { userId, movieId } = req.params;
+  
     try {
-      const deletedWatchlistItem = await db.query("DELETE FROM watchlists WHERE id = $1 RETURNING *;", [id]);
-      if (deletedWatchlistItem.rows.length === 0) {
-        response.status(404).json({ error: "Watchlist item not found." });
-      } else {
-        response.json({ message: "Watchlist item deleted successfully." });
-      }
+      await db.query(
+        'DELETE FROM watchlists WHERE user_id = $1 AND movie_id = $2',
+        [userId, movieId]
+      );
+      res.sendStatus(204);
     } catch (error) {
       console.error(error);
-      response.status(500).json({ error: "An error occurred." });
+      res.status(500).json({ error: 'An error occurred.' });
     }
   });
 

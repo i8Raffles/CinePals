@@ -45,7 +45,7 @@ module.exports = db => {
   });
 
    // GET movie by movie_id(id from API)
-   router.get("/movies/movie/:movieId", async (request, response) => {
+   router.get("/movies/:movieId", async (request, response) => {
     const { movieId } = request.params;
     try {
       const movie = await db.query("SELECT * FROM movies WHERE movie_id = $1;", [movieId]);

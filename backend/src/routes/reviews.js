@@ -30,7 +30,7 @@ module.exports = db => {
   });
 
   // GET all reviews by userId
-  router.get("/reviews/user/:userId", async (request, response) => {
+  router.get("/users/:userId/reviews", async (request, response) => {
     const { userId } = request.params;
     try {
       const reviews = await db.query("SELECT * FROM reviews WHERE user_id = $1;", [userId]);
@@ -58,7 +58,7 @@ module.exports = db => {
   });
   
   // GET reviews for a particular movie ID
-  router.get("/reviews/movie/:movieId", async (request, response) => {
+  router.get("/movies/:movieId/reviews", async (request, response) => {
     const { movieId } = request.params;
     try {
       const reviews = await db.query("SELECT * FROM reviews WHERE movie_id = $1;", [movieId]);
@@ -85,9 +85,10 @@ module.exports = db => {
   });
 
   // POST a new review and add movie to database???
-  router.post('/reviews', async (req, res) => {
+  router.post('/users/:userId/movies/:movieId/reviews', async (req, res) => {
     // Extract the necessary data from the request body
-    const { movieId, userId, rating, reviewText } = req.body;
+    const { rating, reviewText } = req.body;
+    const { userId, movieId } = req.params
   
     const options = {
       method: 'GET',
