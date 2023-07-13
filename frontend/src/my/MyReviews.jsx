@@ -61,12 +61,12 @@ function MyReviews() {
                       })}
                     </Typography>
                   </Box>
+
+                  <Paper elevation={0} sx={{  width: '100%', bgcolor: 'rgb(243, 242, 241)', p: 2, mt: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar src={m.profile_url} alt={m.username}></Avatar>
                     <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>{m.username}</Typography>
                   </Box>
-
-                  <Paper elevation={0} sx={{  width: '100%', bgcolor: 'rgb(243, 242, 241)', p: 2, mt: 1 }}>
                     <Stack direction="row" alignItems="center">
                       <Typography variant="span" sx={{ fontSize: 14, color: grey[600] }}>
                         {new Date(m.created_at).toLocaleDateString('en-US', {
