@@ -6,6 +6,7 @@ import MyProfile from "./my/MyProfile";
 import UserProfile from "./user/UserProfile";
 import MyFollows from "./my/MyFollows";
 import MyMovies from "./my/MyMovies";
+import MyReviews from "./my/MyReviews";
 import React from "react";
 import MyContainer from "./my/MyContainer";
 import UserContainer from "./user/UserContainer";
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
                         path: '/my/profile',
                         element: <MyProfile/>
                     },
+                    {
+                        path: '/my/reviews',
+                        element: <MyReviews/>
+                    }
                 ]
             },
             {
