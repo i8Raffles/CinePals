@@ -56,6 +56,18 @@ module.exports = db => {
       response.status(500).json({ error: "An error occurred." });
     }
   });
+  
+  // GET reviews for a particular movie ID
+  router.get("/reviews/movie/:movieId", async (request, response) => {
+    const { movieId } = request.params;
+    try {
+      const reviews = await db.query("SELECT * FROM reviews WHERE movie_id = $1;", [movieId]);
+      response.json(reviews.rows);
+    } catch (error) {
+      console.error(error);
+      response.status(500).json({ error: "An error occurred." });
+    }
+  });
 
   // POST new review
   router.post("/reviews", async (request, response) => {
