@@ -19,7 +19,7 @@ function MovieThumbnail(props) {
         minWidth: 120, maxWidth: 240,
         overflow: 'auto',
         flexGrow: 1, flexShrink: 0,
-        width: '15%', flexBasis: 'auto' }}>
+        width: '100%', flexBasis: 'auto' }}>
         <CardHeader sx={{ whiteSpace: 'nowrap' }} avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{props.movie.name[0]}</Avatar>
         } title={props.movie.name} subheader={props.movie.releaseDate}/>
