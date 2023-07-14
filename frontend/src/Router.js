@@ -10,6 +10,9 @@ import MyReviews from "./my/MyReviews";
 import React from "react";
 import MyContainer from "./my/MyContainer";
 import UserContainer from "./user/UserContainer";
+import UserMovies from "./user/UserMovies";
+import UserReviews from "./user/UserReviews";
+import UserFollows from "./user/UserFollows";
 
 const router = createBrowserRouter([
     {
@@ -53,11 +56,15 @@ const router = createBrowserRouter([
                     },
                     {
                         path: 'user/:userId/movies',
-                        element: <UserProfile/>
+                        element: <UserMovies/>
+                    },
+                    {
+                        path: 'user/:userId/reviews',
+                        element: <UserReviews/>
                     },
                     {
                         path: 'user/:userId/follows',
-                        element: <UserProfile/>
+                        element: <UserFollows/>
                     },
                 ]
             },
