@@ -11,7 +11,7 @@ function MyReviews() {
   const { state, setReviews, handleSubmit } = useMyreviews();
   const [error, setError] = useState("");
 
-  console.log("state ", state);
+  // console.log("state ", state);
 
   const handleReviewChange = (event, reviewId) => {
     const updatedReview = event.target.value;

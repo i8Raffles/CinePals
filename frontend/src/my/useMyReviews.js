@@ -25,7 +25,7 @@ const useMyReviews = () => {
           error: error.message,
         });
       }
-      console.log(state.movies);
+      // console.log(state.movies);
     };
 
     fetchMyMovies();
