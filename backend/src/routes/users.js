@@ -107,5 +107,72 @@ module.exports = db => {
     });
   });
 
+  
+  //Add follow info by following_id and user_id
+  router.post("/addfollows/:userId/:followId", (request, response) => {
+    const userId = request.params.userId;
+    const followId = request.params.followId;
+    
+    db.query(
+      `SELECT COUNT(*) FROM followers WHERE user_id = $1 AND following_id = $2`,
+      [userId, followId]
+    ).then((result) => {
+        const rowCount = result.rows[0].count;
+        if (rowCount === 0) {
+          // No row exists, so add a new row
+          db.query(
+            `INSERT INTO followers (user_id, following_id, follow_state)
+             VALUES ($1, $2, TRUE)`,
+            [userId, followId]
+          ).then(() => {
+              response.sendStatus(200);
+            })
+          .catch((error) => {
+              console.error(error);
+              response.sendStatus(500);
+            });
+        } else {
+          // Row exists, so update follow_state to true
+          db.query(
+            `UPDATE followers SET follow_state = TRUE
+             WHERE user_id = $1 AND following_id = $2`,
+            [userId, followId]
+          ).then(() => {
+            response.sendStatus(200);
+            })
+          .catch((error) => {
+              console.error(error);
+              response.sendStatus(500);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        response.sendStatus(500);
+      });
+  });
+
+  //Check follow_state
+  router.get("/checkfollow/:userId/:followId", (request, response) => {
+    const userId = request.params.userId;
+    const followId = request.params.followId;
+    // Query the database to check the follow status
+    db.query(
+      `SELECT follow_state FROM followers WHERE user_id = $1 AND following_id = $2`,[userId, followId]
+    )
+    .then((result) => {
+      if (result.rows.length > 0) {
+        const isFollowed = result.rows[0].follow_state;
+        response.json({ isFollowed });
+      } else {
+        response.json({ isFollowed: false });
+      }
+    })
+    .catch((error) => {
+      console.error("Error checking follow status:", error);
+      response.sendStatus(500);
+    });
+  });
+
   return router;
 };
