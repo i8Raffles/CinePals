@@ -3,10 +3,13 @@ import useMyMovies from "./useMyMovies";
 import MovieThumbnail from "../components/MovieThumbnail";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import theme from "../theme/mainTheme";
+import { format } from 'date-fns';
 
 
 function MyMovies() {
-  const { state, deleteMovie } = useMyMovies();
+  const userId = 1; //hard code
+  const { state, deleteMovie } = useMyMovies(userId);
+  
   const handleDelete = (userId, movieId) => {
     deleteMovie(userId, movieId);
   };
@@ -34,7 +37,7 @@ function MyMovies() {
                 movie_id: m.movie_id,
                 name: m.title,
                 description: m.overview,
-                releaseDate: m.release_date,
+                releaseDate: format(new Date(m.release_date), 'yyyy-MM-dd'),
                 poster: IMAGE_BASE_URL + m.poster_path,
                 rating: m.vote_average,
               }}
@@ -42,7 +45,7 @@ function MyMovies() {
             />
             <Button
                 variant="outlined"
-                onClick={() => handleDelete(1, m.movie_id)}
+                onClick={() => handleDelete(userId, m.movie_id)}
                 sx={{ marginTop: 2 }}
               >
                 Remove
