@@ -16,7 +16,6 @@ const useMyFollows = () => {
 
   const handleUnfollow = async (userId, followId) => {
     try {
-    console.log("userId :", userId, "Unfollow button clicked for follow ID:", followId);
     await axios.patch(`/api/follows/${userId}/${followId}`);
     fetchFollows();
     } catch (error) {
