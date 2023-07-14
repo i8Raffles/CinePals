@@ -1,9 +1,9 @@
 INSERT INTO users (first_name, last_name, username, email, profile_url, profile_description, password_hash)
 VALUES
-  ('John', 'Doe', 'johndoe', 'johndoe@example.com', 'https://example.com/johndoe', 'Profile description for John Doe', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m'),
-  ('Jane', 'Smith', 'janesmith', 'janesmith@example.com', 'https://example.com/janesmith', 'Profile description for Jane Smith', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m'),
-  ('Cindy', 'Wilson', 'cindywilson', 'cindywilson@example.com', 'https://example.com/cindywilson', 'Profile description for Cindy Wilson', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m'),
-  ('Taylor', 'Swift', 'taylorswift', 'taylorswift@example.com', 'https://example.com/taylorswift', 'Profile description for Taylor Swift', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m');
+  ('John', 'Doe', 'johndoe', 'johndoe@example.com', 'https://dbdzm869oupei.cloudfront.net/img/t-shirts/preview/59199.png', 'Profile description for John Doe', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m'),
+  ('Jane', 'Smith', 'janesmith', 'janesmith@example.com', 'https://st.depositphotos.com/1005549/1553/v/450/depositphotos_15530783-stock-illustration-white-kitty.jpg', 'Profile description for Jane Smith', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m'),
+  ('Cindy', 'Wilson', 'cindywilson', 'cindywilson@example.com', 'https://cdn.pixabay.com/photo/2021/02/11/16/20/cat-6005844_1280.png', 'Profile description for Cindy Wilson', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m'),
+  ('Taylor', 'Swift', 'taylorswift', 'taylorswift@example.com', 'https://cdn.vectorstock.com/i/preview-1x/94/40/cute-cat-vector-19469440.jpg', 'Profile description for Taylor Swift', '$2b$10$9rXyFpq9A7Qd0klv7AZZi.6lBGGKFyT5D9cCY8GQ0F8zca4OGVo4m');
 
   INSERT INTO movies (movie_id, original_title, title, overview, poster_path, vote_average, release_date)
 VALUES
