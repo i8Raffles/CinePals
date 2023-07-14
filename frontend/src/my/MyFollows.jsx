@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper, Avatar, Typography, Button, Link } from "@mui/material";
+import { Box, Paper, Avatar, Typography, Button } from "@mui/material";
 import useMyFollows from "./useMyFollows";
 import { useNavigate  } from "react-router-dom";
 
