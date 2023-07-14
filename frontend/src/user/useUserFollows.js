@@ -3,7 +3,6 @@ import axios from "axios";
 
 const useUserFollows = (userId) => {
   const [follows, setFollows] = useState([]);
-  // const userId = 1; //hard coding
 
   const fetchFollows = async () => {
     try {
