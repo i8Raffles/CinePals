@@ -25,16 +25,16 @@ function MyContainer(props) {
           <nav style={{ display: "flex", justifyContent: "space-between" }}>
             <ul style={{ display: "flex", listStyle: "none", padding: 0 }}> 
               <li>
-              <StyledNavLink to="/my/profile" activeClassName="active">My Profile</StyledNavLink>
+              <StyledNavLink to="/my/profile" activeclassname="active">My Profile</StyledNavLink>
               </li>
               <li>
-              <StyledNavLink to="/my/movies" activeClassName="active">My Movies</StyledNavLink>
+              <StyledNavLink to="/my/movies" activeclassname="active">My Movies</StyledNavLink>
               </li>
               <li>
-              <StyledNavLink to="/my/reviews" activeClassName="active">My Reviews</StyledNavLink>
+              <StyledNavLink to="/my/reviews" activeclassname="active">My Reviews</StyledNavLink>
               </li>
               <li>
-              <StyledNavLink to="/my/follows" activeClassName="active">My Follows</StyledNavLink>
+              <StyledNavLink to="/my/follows" activeclassname="active">My Follows</StyledNavLink>
               </li>
             </ul>
           </nav>
