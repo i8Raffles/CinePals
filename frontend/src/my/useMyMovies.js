@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useMyMovies = () => {
+const useMyMovies = (userId) => {
   const [state, setState] = useState({
     movies: [],
     loading: true,
@@ -11,7 +11,7 @@ const useMyMovies = () => {
   useEffect(() => {
     const fetchMyMovies = async () => {
       try {
-        const response = await axios.get("/api/watchlists"); 
+        const response = await axios.get(`/api/watchlists/${userId}`); 
         setState({
           movies: response.data,
           loading: false,
