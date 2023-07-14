@@ -3,7 +3,8 @@ const { request, response } = require("express");
 const router = require("express").Router();
 
 module.exports = db => {
-  router.get("/watchlists", (request, response) =>{
+  router.get("/watchlists/:userId", (request, response) =>{
+    const userId = request.params.userId;
     db.query(`
     SELECT *
     FROM movies
@@ -11,9 +12,9 @@ module.exports = db => {
       (
       SELECT movie_id
       FROM watchlists
-      WHERE user_id = 1
+      WHERE user_id = $1
       )
-    `).then(({rows: watchlists }) => {
+    `,[userId]).then(({rows: watchlists }) => {
       response.json(watchlists);
     });
   });
