@@ -8,17 +8,78 @@ import {
     Paper,
     Rating,
     Stack,
-    Typography
+    Typography,
+    Dialog, 
+    DialogContent
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import {blueGrey, deepOrange, grey} from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import StyledTextarea from "../components/StyledTextArea";
+import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
+import useMovieDetail from "./useMovieDetail";
+import { useParams } from "react-router-dom";
+import {React, useState} from "react";
+import { format } from 'date-fns';
+import YouTubePlayer from "./youTubePlayer";
 
-function MovieDetail({movie, comments}) {
+function MovieDetail() {
+    const { movieId } = useParams();
+    const { state, handleSubmit } = useMovieDetail(movieId);
+    // const [newRating, setNewRating] = useState({});
+    const [newRating, setNewRating] = useState(0);
+    const [newReview, setNewReview] = useState("");
+    const [openPlayer, setOpenPlayer] = useState(false); 
+    // console.log("state in MovieDetail :", state);
+    const reviews = state.reviews;
+    // console.log("reviews of this movie in MovieDetail :", state.reviews);
 
-    return <Box>
-        <Box sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
+    const youtubeVideoId = state.movie.trailer;
+
+    const handlePlayTrailer = () => {
+        setOpenPlayer(true);
+      };
+    
+      const handleClosePlayer = () => {
+        setOpenPlayer(false);
+      };
+
+      const handleReviewChange = (event) => {
+        setNewReview(event.target.value);
+      };
+
+      const handlePostReview = (newReview, newRating) => {
+        console.log("newRating in handlePostReview", newRating);
+        handleSubmit(newReview, newRating);
+
+    };
+
+    const handleRatingChange = (event) => {
+        const updatedRating = parseFloat(event.target.value);
+        console.log("set New Rating is ", updatedRating);
+        setNewRating(updatedRating);
+      };
+    
+
+    const movie ={
+        id: state.movie.id,
+        movie_id: state.movie.id,
+        name: state.movie.title,
+        description: state.movie.overview,
+        releaseDate: state.movie.release_date,
+        poster: IMAGE_BASE_URL +state.movie.poster_path,
+        rating: state.movie.vote_average,
+        genres: state.movie.genres,
+        runtime:state.movie.runtime
+
+    };
+
+    if (!state.movie || Object.keys(state.movie).length === 0) {
+        return <div>Loading...</div>;
+      }
+    return <Box key={movie.id}>
+        
+        <Box  sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
             <Box sx={{display: 'inline-flex', alignSelf: 'flex-start', width: 420, flexGrow: 1}} component="div">
                 <img width="100%" alt={movie.name} src={movie.poster}/>
             </Box>
@@ -38,11 +99,11 @@ function MovieDetail({movie, comments}) {
                     },
                 }}
                      component="div">
-                    <Typography variant="span">{movie.type}</Typography>
+                    <Typography variant="span">{movie.releaseDate}</Typography>
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
-                    <Typography variant="span">{movie.duration}</Typography>
+                    <Typography variant="span">{movie.runtime} minutes</Typography>
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
-                    <Typography variant="span">{movie.genres.join(', ')}</Typography>
+                    {/* <Typography variant="span">{movie.genres.join(', ')}</Typography> */}
                 </Box>
                 <Box p={2} component="p">{movie.description}</Box>
                 <Stack direction="row" alignItems="center">
@@ -59,13 +120,14 @@ function MovieDetail({movie, comments}) {
                             bgcolor: deepOrange[500],
                             fontSize: 14,
                             ml: 4
-                        }}>{movie.rating}</Avatar>
+                        }}>{movie.rating.toFixed(1)}</Avatar>
                 </Stack>
                 <Stack direction="row" alignItems="center">
                     <FormControlLabel control={
                         <Rating sx={{fontSize: 32, ml: 1}} value={movie.rating / 2}
-                                precision={0.1}
-                                emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
+                            readOnly
+                            precision={0.1}
+                            emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
                     } label="App Rating" labelPlacement="start"/>
                     <Avatar
                         sx={{
@@ -74,70 +136,74 @@ function MovieDetail({movie, comments}) {
                             bgcolor: deepOrange[500],
                             fontSize: 14,
                             ml: 4
-                        }}>{movie.rating}</Avatar>
+                        }}>{movie.rating.toFixed(1)}
+                    </Avatar>
                 </Stack>
-                <Box sx={{mt: 4}} component="div">
-                    <FormControlLabel control={
-                        <IconButton aria-label="add to favorites">
-                            <FavoriteIcon sx={{color: grey[400]}} fontSize="large"/>
-                        </IconButton>
-                    } label="Add to favorites" labelPlacement="start"/>
+                <Box mt={2}>
+                    <Button variant="contained" color="primary" onClick={handlePlayTrailer}>
+                    Play Trailer
+                    </Button>
+                  <FormControlLabel control={
+                    <IconButton aria-label="add to favorites">
+                        <FavoriteIcon sx={{color: grey[400]}} fontSize="large"/>
+                    </IconButton>
+                     } label="Add to My Movies" labelPlacement="start"/>
                 </Box>
+
+                {/* Dialog/Modal to show the video player */}
+                <Dialog open={openPlayer} onClose={handleClosePlayer} fullWidth maxWidth="md">
+                    <DialogContent>
+                    <YouTubePlayer videoId={youtubeVideoId} onClose={handleClosePlayer} />
+                    </DialogContent>
+                </Dialog>
+
             </Paper>
         </Box>
         <Paper variant="outlined" component="div" sx={{display: 'flex', flexDirection: 'column', mt: 2, p: 2, width: '100%'}}>
+        <Stack direction="row" alignItems="center">
+                      
+                      <Box flexGrow={1} />
+                      <Rating
+                        value={newRating !== undefined ? newRating : 0}
+                        onChange={(event) => handleRatingChange(event)}
+                        precision={0.1}
+                        emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
+                        />
+                      <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                      >{(newRating * 2.0 || parseFloat(movie.rating).toFixed(1)) }
+                      </Typography>
+                    </Stack>
             <Stack direction="row" mb={1}>
                 <FormControlLabel sx={{alignItems: 'flex-start', flexGrow: 1}} control={
-                    <StyledTextarea sx={{width: '100%'}} minRows={3}/>
-                } label="Comments" labelPlacement="top"/>
-                <Button>Post</Button>
+                    <StyledTextarea sx={{width: '100%'}} minRows={3} value={newReview} onChange={(event) => handleReviewChange(event)}/>
+                } label="Reviews" labelPlacement="top" />
+                <Button onClick={()=>handlePostReview(newReview, newRating)}>Post</Button>
             </Stack>
-            {!!comments && comments.length > 0 && comments.map(comment => (
-                <Box sx={{display: 'flex', flexDirection: 'row', p: 2, gap: 2 }}>
-                    <Avatar>{comment.user.split(' ').map(w => w[0]).join('')}</Avatar>
-                    <Paper elevation={0} sx={{bgcolor: 'rgb(243, 242, 241)', p: 2}}>
-                        <Stack direction="row" alignItems="center">
-                            <Typography variant="span" sx={{ fontWeight: 600 }}>{comment.user}</Typography>
-                            <Typography variant="span" sx={{fontSize: 11, color: grey[600], ml: 1}}>{comment.date}</Typography>
+            {reviews && reviews.length > 0 && reviews.map(review => (
+                <Box key={review.id} sx={{display: 'flex', flexDirection: 'row', p: 2, gap: 2}}>
+                    {/* <Avatar>{comment.user.split(' ').map(w => w[0]).join('')}</Avatar> */}
+                    <Avatar>{review.username.split(' ').map(w => w[0]).join('')}</Avatar>
+                    <Paper elevation={0} sx={{bgcolor: 'rgb(243, 242, 241)', p: 2 ,width: '100%'}}>
+                        <Stack direction="row" alignItems="center" >
+                            <Typography variant="span" sx={{ fontWeight: 600 }}>{review.username}</Typography>
+                            <Typography variant="span" sx={{fontSize: 11, color: grey[600], ml: 1}}>{format(new Date(review.created_at), 'yyyy-MM-dd')}</Typography>
+                            
                             <Box flexGrow={1} />
-                            <Rating sx={{fontSize: 24, mr: 2}} value={comment.rating / 2}
-                                    readOnly
-                                    precision={0.1}
-                                    emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
+                            <Rating sx={{fontSize: 24, mr: 2}} value={review.rating / 2}
+                                readOnly
+                                precision={0.1}
+                                emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
+                            <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                            >{review.rating }
+                            </Typography>
                         </Stack>
-                        <Typography sx={{mt: 1}}>{comment.comment}</Typography>
+                        <Typography sx={{mt: 1}}>{review.review}</Typography>
                     </Paper>
                 </Box>
             ))}
         </Paper>
-
+        
     </Box>
-}
-
-MovieDetail.defaultProps = {
-    movie: {
-        name: 'The Darkest Minds',
-        poster: 'https://image.tmdb.org/t/p/w500//94RaS52zmsqaiAe1TG20pdbJCZr.jpg',
-        description: "After a disease kills 98% of America's children, the surviving 2% develop superpowers and are placed in internment camps. A 16-year-old girl escapes her camp and joins a group of other teens on the run from the government.",
-        rating: 7.5,
-        type: 'TV-MA',
-        duration: '50 min',
-        genres: ['Action', 'Adventure', 'Drama']
-    },
-    comments: [
-        {
-            user: 'Joe Lipsett',
-            comment: "The film leans into all of the book's worst impulses and, most disappointingly, gives star Amandla Stenberg nothing to do. The FX is on par with other YA films, but the disinterest in exploring this dystopia renders The Darkest Minds hollow.",
-            date: 'December 1, 2021',
-            rating: 6.5
-        },
-        {
-            user: 'Wendy Ide',
-            comment: "The film shares far too many tropes with other YA sci-fi properties - The Hunger Games, The Maze Runner, Divergent - to make a mark in the unforgiving post-apocalyptic wasteland of the adolescent market.",
-            date: 'August 12, 2018',
-            rating: 8.5
-        }
-    ]
 }
 
 export default MovieDetail;
