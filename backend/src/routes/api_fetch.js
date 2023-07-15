@@ -105,12 +105,12 @@ router.get('/movies_upcoming/:page', async (req, res) => {
   }
 });
 
-router.get('/movie_details/:movie_id', async (req, res) => {
-  const { movie_id } = req.params;
-
+router.get('/movie_details/:movieId', async (req, res) => {
+  const { movieId } = req.params;
+  console.log("movie_id in api fetch ", movieId);
   const options = {
     method: 'GET',
-    url: `https://api.themoviedb.org/3/movie/${movie_id}`,
+    url: `https://api.themoviedb.org/3/movie/${movieId}`,
     params: {
       language: 'en-US'
     },
@@ -119,15 +119,55 @@ router.get('/movie_details/:movie_id', async (req, res) => {
       Authorization: config.api.authorization
     }
   };
+  const options2= {
+    method: 'GET',
+    url: `https://api.themoviedb.org/3/movie/${movieId}/videos`,
+    params: {
+      language: 'en-US'
+    },
+    headers: {
+      accept: config.api.accept,
+      Authorization: config.api.authorization
+    }
+  };
+  
 
+  // try {
+  //   const response = await axios.request(options);
+  //   const trailer_response = await axios.request(options2);
+  //   res.json(response.data, trailer_response.data);
+  //   console.log("api fetch ", response.data);
+  // } catch (error) {
+  //   console.error(error);
+  //   res.status(500).json({ error: 'An error occurred' });
+  // }
   try {
-    const response = await axios.request(options);
-    res.json(response.data);
+    const [response, trailerResponse] = await Promise.all([
+      axios.request(options),
+      axios.request(options2)
+    ]);
+
+    const movieData = response.data;
+    const trailerData = trailerResponse.data;
+    // console.log("trailerData ", trailerData.results);
+    
+    const officialTrailer = trailerData.results.find(trailer => trailer.name === "Official Trailer");
+    const trailerKey = officialTrailer.key;
+
+    // Combine the movie details and trailer data into a single object
+    const movieDetailsWithTrailer = {
+      ...movieData,
+      trailer: trailerKey
+    };
+
+    res.json(movieDetailsWithTrailer);
+    // console.log("API fetch - movie details with the official trailer:", movieDetailsWithTrailer);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred' });
   }
 });
+
 
 router.get('/movies_by_genres/:genre/:page', async (req, res) => {
   const { genre, page } = req.params;
