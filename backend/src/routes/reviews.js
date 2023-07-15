@@ -15,6 +15,26 @@ module.exports = db => {
     });
   });
 
+  //Get reviews by movie_id
+  router.get("/reviews/:movieId", (request, response) => {
+    const movieId = request.params.movieId;
+    db.query(`
+      SELECT 
+      reviews.id,
+      reviews.movie_id,
+      reviews.rating,
+      reviews.review,
+      reviews.created_at,
+      reviews.user_id,
+      users.username
+      FROM reviews
+      JOIN users ON users.id = reviews.user_id
+      WHERE movie_id = $1;
+    `,[movieId]).then(({ rows:reviews }) => {
+      response.json(reviews);
+    });
+  });
+
   //get reviews and movies by userId
   router.get("/myreviews/:userId", (request, response) => {
     const userId = request.params.userId;
@@ -58,6 +78,26 @@ module.exports = db => {
       console.error(error);
       response.sendStatus(500); 
     });
+ 
+  });
+
+  //Add review by movie_id & user_id
+  router.post("/reviews/:movieId/:userId", (request, response) => {
+    const movieId = request.params.movieId;
+    const userId = request.params.userId
+    const { newReview,newRating }  = request.body;
+    console.log("add review: ", movieId, userId, newRating, newReview);
+    db.query(`
+      INSERT INTO reviews (movie_id, rating, review, user_id)
+      VALUES ($1, $2, $3, $4)
+    `,[movieId, newRating * 2.0, newReview, userId]).then(() => {
+      response.sendStatus(200); 
+    })
+    .catch((error) => {
+      console.error(error);
+      response.sendStatus(500); 
+    });
+ 
   });
 
   return router;
