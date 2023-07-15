@@ -1,5 +1,6 @@
-import {React, useState} from "react";
+import {React, useState, useEffect} from "react";
 import { Box, ThemeProvider, Avatar, Paper, Stack, Typography, Rating, Button} from "@mui/material";
+import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import { grey } from "@mui/material/colors";
 import theme from "../theme/mainTheme";
@@ -10,22 +11,39 @@ function MyReviews() {
   
   const { state, setReviews, handleSubmit } = useMyreviews();
   const [error, setError] = useState("");
-
-  // console.log("state ", state);
+  const [updatedRatings, setUpdatedRatings] = useState({});
 
   const handleReviewChange = (event, reviewId) => {
     const updatedReview = event.target.value;
     setReviews(reviewId, updatedReview);
     };
   
+
     const handleEdit = (reviewId, updatedReview) => {
+      const updatedRating = updatedRatings[reviewId];
       if (updatedReview.trim() !== "") {
-        handleSubmit(reviewId, updatedReview);
+        handleSubmit(reviewId, updatedReview, updatedRating);
         setError("");
       } else {
         setError("Review cannot be empty!");
       }
     };
+
+  const handleRatingChange = (event, reviewId) => {
+    const updatedRating = parseFloat(event.target.value);
+    setUpdatedRatings((prevRatings) => ({
+      ...prevRatings,
+      [reviewId]: updatedRating,
+    }));
+  };
+
+  useEffect(() => {
+    const initialRatings = {};
+    state.movies.forEach((m) => {
+      initialRatings[m.id] = parseFloat(m.rating/2.0);
+    });
+    setUpdatedRatings(initialRatings);
+  }, [state.movies]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -44,9 +62,13 @@ function MyReviews() {
           <Paper variant="outlined" component="div" sx={{ display: 'flex', flexDirection: 'column', mt: 2, p: 2, width: '100%' }}>
             {state.movies.map((m) => (
               <Box key={m.id} sx={{ display: 'flex', flexDirection: 'row', p: 2, gap: 2 }}>
+                
                 <Box sx={{ display: 'inline-flex', alignSelf: 'flex-start', width: '10%', flexGrow: 1 }} component="div">
+                <Link to={`/movies/${m.movie_id}`}>
                   <img width="100%" height="100%" alt={m.title} src={IMAGE_BASE_URL + m.poster_path} />
+                  </Link>
                 </Box>
+                
 
                 <Box sx={{ display: 'flex', flexDirection: 'column', width: '90%', flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -65,23 +87,25 @@ function MyReviews() {
                   <Paper elevation={0} sx={{  width: '100%', bgcolor: 'rgb(243, 242, 241)', p: 2, mt: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Avatar src={m.profile_url} alt={m.username}></Avatar>
-                    <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>{m.username}</Typography>
-                  </Box>
-                    <Stack direction="row" alignItems="center">
-                      <Typography variant="span" sx={{ fontSize: 14, color: grey[600] }}>
-                        {new Date(m.created_at).toLocaleDateString('en-US', {
+                    <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>Written by {m.username} on {new Date(m.created_at).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: '2-digit',
                           day: '2-digit',
-                        })}
-                      </Typography>
+                        })}</Typography>
+                  </Box>
+                    <Stack direction="row" alignItems="center">
+                      
                       <Box flexGrow={1} />
+                      
                       <Rating
-                        value={parseFloat(m.rating)}
-                        readOnly
+                        value={updatedRatings[m.id] !== undefined ? updatedRatings[m.id] : parseFloat(m.rating)}
+                        onChange={(event) => handleRatingChange(event, m.id)}
                         precision={0.1}
                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                       />
+                      <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                      >{(updatedRatings[m.id] * 2.0 || parseFloat(m.rating)) }
+                      </Typography>
                     </Stack>
                     <Paper sx={{ width: '100%' }}>
                       <textarea
@@ -92,7 +116,16 @@ function MyReviews() {
                     </Paper>
                                        
                   </Paper>
-                  <Button onClick={() => handleEdit(m.id, m.review)}>Edit</Button>
+                  <Button onClick={() => handleEdit(m.id, m.review)} sx={{
+                    
+                    backgroundColor: "rgb(117, 135, 161)",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "rgb(25, 118, 210)",
+                    },
+                    width: "200px",
+                    margin: "0 auto",
+                  }}>Save Update</Button>
                 </Box>
               </Box>
             ))}
