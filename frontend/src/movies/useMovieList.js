@@ -17,6 +17,8 @@ function useMovieList() {
             .catch(err => console.log);
     }, [state.filter, state.page]);
 
+    // console.log("in useMovieList, state is ", state);
+
     return {state, dispatch};
 }
 
