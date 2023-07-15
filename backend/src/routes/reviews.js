@@ -46,12 +46,12 @@ module.exports = db => {
   //Update review by reviewId
   router.patch("/myreviews/:reviewId", (request, response) => {
     const reviewId = request.params.reviewId;
-    const { updatedReview }  = request.body;
+    const { updatedReview,updatedRating }  = request.body;
     db.query(`
       UPDATE reviews
-      SET review = $1
-      WHERE id = $2
-    `,[updatedReview, reviewId]).then(() => {
+      SET review = $1, rating = $2 
+      WHERE id = $3
+    `,[updatedReview, updatedRating * 2.0, reviewId]).then(() => {
       response.sendStatus(200); 
     })
     .catch((error) => {
