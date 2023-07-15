@@ -24,7 +24,7 @@ const useMyMovies = (userId) => {
           error: error.message,
         });
       }
-      // console.log(state.movies);
+
     };
 
     fetchMyMovies();
@@ -51,7 +51,7 @@ const useMyMovies = (userId) => {
     }
    }
   };
-
+  console.log("useMyMovies file, state.movies :",state.movies);
   return { state, deleteMovie };
 };
 
