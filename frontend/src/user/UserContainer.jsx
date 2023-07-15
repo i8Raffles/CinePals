@@ -15,7 +15,7 @@ const StyledNavLink = styled(NavLink)(({ theme }) => ({
       backgroundColor: "lightgray",
     },
     "&.active": {
-      backgroundColor: "rgb(25, 118, 210)",
+      backgroundColor: "rgb(196, 114, 37)",
       color: "white"
     },
   }));
