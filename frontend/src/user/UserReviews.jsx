@@ -1,5 +1,6 @@
 import {React} from "react";
 import { Box, ThemeProvider, Avatar, Paper, Stack, Typography, Rating} from "@mui/material";
+import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
 import { grey } from "@mui/material/colors";
 import theme from "../theme/mainTheme";
@@ -29,7 +30,9 @@ function UserReviews(props) {
                 {state.movies.map((m) => (
                   <Box key={m.id} sx={{ display: 'flex', flexDirection: 'row', p: 2, gap: 2 }}>
                     <Box sx={{ display: 'inline-flex', alignSelf: 'flex-start', width: '10%', flexGrow: 1 }} component="div">
+                    <Link to={`/movies/${m.movie_id}`}>
                       <img width="100%" height="100%" alt={m.title} src={IMAGE_BASE_URL + m.poster_path} />
+                      </Link>
                     </Box>
     
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '90%', flexGrow: 1 }}>
@@ -49,23 +52,24 @@ function UserReviews(props) {
                       <Paper elevation={0} sx={{  width: '100%', bgcolor: 'rgb(243, 242, 241)', p: 2, mt: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Avatar src={m.profile_url} alt={m.username}></Avatar>
-                        <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>{m.username}</Typography>
+                        <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>Written by {m.username} on {new Date(m.created_at).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                        })}</Typography>
                       </Box>
                         <Stack direction="row" alignItems="center">
-                          <Typography variant="span" sx={{ fontSize: 14, color: grey[600] }}>
-                            {new Date(m.created_at).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: '2-digit',
-                              day: '2-digit',
-                            })}
-                          </Typography>
+                          
                           <Box flexGrow={1} />
                           <Rating
-                            value={parseFloat(m.rating)}
+                            value={parseFloat(m.rating /2.0 )}
+                            precision={0.5}
                             readOnly
-                            precision={0.1}
                             emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
-                          />
+                         />
+                         <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                             >{parseFloat(m.rating)}
+                          </Typography>
                         </Stack>
                         <Paper sx={{ width: '100%' }}>
                           <textarea
