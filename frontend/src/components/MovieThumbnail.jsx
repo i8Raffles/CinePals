@@ -23,7 +23,7 @@ function MovieThumbnail(props) {
         <CardHeader sx={{ whiteSpace: 'nowrap' }} avatar={
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{props.movie.name[0]}</Avatar>
         } title={props.movie.name} subheader={props.movie.releaseDate}/>
-        <Link to={'/movies/' + props.movie.id}>
+        <Link to={'/movies/' + props.movie.movie_id}>
             <CardMedia
                 component="img"
                 height="150"
