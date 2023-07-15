@@ -108,9 +108,6 @@ module.exports = db => {
       // Extract the relevant information from the API response
       const { id, original_title, title, overview, poster_path, vote_average, release_date } = movieResponse.data;
   
-      // Prepend the base URL to the poster path
-      const fullPosterPath = `https://image.tmdb.org/t/p/w300${poster_path}`;
-  
       // Save the extracted information to the database
       const savedReview = await db.query(
         'INSERT INTO reviews (movie_id, user_id, rating, review) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -119,7 +116,7 @@ module.exports = db => {
   
       const savedMovie = await db.query(
         'INSERT INTO movies (movie_id, original_title, title, overview, poster_path, vote_average, release_date) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-        [id, original_title, title, overview, fullPosterPath, vote_average, release_date]
+        [id, original_title, title, overview, poster_path, vote_average, release_date]
       );
   
       res.status(201).json({ review: savedReview.rows[0], movie: savedMovie.rows[0] });
