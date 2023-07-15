@@ -29,10 +29,11 @@ function MovieList(props) {
           }}
         >
           {state.movies.map((m) => (
-            <Box sx={{ width: '20%', p: 1 }}><MovieThumbnail
+            <Box key={m.id} sx={{ width: '20%', p: 1 }}><MovieThumbnail
               key={m.id}
               movie={{
                 id: m.id,
+                movie_id: m.id,
                 name: m.title,
                 description: m.overview,
                 releaseDate: m.release_date,
