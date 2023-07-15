@@ -48,14 +48,15 @@ const useMyReviews = () => {
     });
   };
 
-  const handleSubmit = (reviewId, updatedReview) => {
+  const handleSubmit = (reviewId, updatedReview, updatedRating) => {
     
     // console.log(`Review ID: ${reviewId}, Updated Review: ${updatedReview}`);
-    const updatedReviews = {
-      updatedReview: updatedReview
+    const updated = {
+      updatedReview: updatedReview,
+      updatedRating:updatedRating
     };
     axios
-      .patch(`/api/myreviews/${reviewId}`, updatedReviews)
+      .patch(`/api/myreviews/${reviewId}`, updated)
       .then((response) => {
         console.log("reviews updated successfully");
       })
