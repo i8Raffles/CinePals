@@ -14,6 +14,9 @@ function MyReviews() {
   const [error, setError] = useState("");
   const [updatedRatings, setUpdatedRatings] = useState({});
 
+  console.log("state in myReviws: ", state);
+  console.log("updatedRatings is ", updatedRatings);
+
   const handleReviewChange = (event, reviewId) => {
     const updatedReview = event.target.value;
     setReviews(reviewId, updatedReview);
@@ -31,20 +34,21 @@ function MyReviews() {
     };
 
   const handleRatingChange = (event, reviewId) => {
-    const updatedRating = parseFloat(event.target.value);
+    const updatedRating = parseFloat(event.target.value) * 2.0;
     setUpdatedRatings((prevRatings) => ({
       ...prevRatings,
       [reviewId]: updatedRating,
     }));
   };
+  
 
   useEffect(() => {
     const initialRatings = {};
     state.movies.forEach((m) => {
-      initialRatings[m.id] = parseFloat(m.rating/2.0);
+      initialRatings[m.id] = parseFloat(m.rating);
     });
     setUpdatedRatings(initialRatings);
-  }, [state.movies]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -99,13 +103,15 @@ function MyReviews() {
                       <Box flexGrow={1} />
                       
                       <Rating
-                        value={updatedRatings[m.id] !== undefined ? updatedRatings[m.id] : parseFloat(m.rating)}
+                        value={updatedRatings[m.id] !== undefined ? updatedRatings[m.id]/2.0 : parseFloat(m.rating)/2.0}
                         onChange={(event) => handleRatingChange(event, m.id)}
                         precision={0.1}
                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                       />
                       <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
-                      >{(updatedRatings[m.id] * 2.0 || parseFloat(m.rating)) }
+                      >
+                        {/* {(updatedRatings[m.id]|| parseFloat(m.rating)) } */}
+                        {(updatedRatings[m.id] !== undefined ? updatedRatings[m.id] : parseFloat(m.rating).toFixed(1))}
                       </Typography>
                     </Stack>
                     <Paper sx={{ width: '100%' }}>

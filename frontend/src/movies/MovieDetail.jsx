@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import {blueGrey, deepOrange, grey} from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import StyledTextarea from "../components/StyledTextArea";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import useMovieDetail from "./useMovieDetail";
@@ -25,16 +25,16 @@ import YouTubePlayer from "./youTubePlayer";
 
 function MovieDetail() {
     const { movieId } = useParams();
-    // Memoize the movieId value to prevent unnecessary re-renders
     const { state, handleSubmit, handleAddToWatchlist } = useMovieDetail(movieId);
     
-    // const [newRating, setNewRating] = useState({});
     const [newRating, setNewRating] = useState(0);
     const [newReview, setNewReview] = useState("");
     const [openPlayer, setOpenPlayer] = useState(false); 
     // console.log("state in MovieDetail :", state);
     const reviews = state.reviews;
     // console.log("reviews of this movie in MovieDetail :", state.reviews);
+    console.log("state.avg_rating in MovieDetail :", state.avg_rating);
+
     const handleAddToWatchlistClick = () => {
         handleAddToWatchlist();
       };
@@ -63,7 +63,7 @@ function MovieDetail() {
     };
 
     const handleRatingChange = (event) => {
-        const updatedRating = parseFloat(event.target.value);
+        const updatedRating = parseFloat(event.target.value) * 2.0;
         console.log("set New Rating is ", updatedRating);
         setNewRating(updatedRating);
       };
@@ -132,7 +132,7 @@ function MovieDetail() {
                 </Stack>
                 <Stack direction="row" alignItems="center">
                     <FormControlLabel control={
-                        <Rating sx={{fontSize: 32, ml: 1}} value={movie.rating / 2}
+                        <Rating sx={{fontSize: 32, ml: 1}} value={parseFloat(state.avg_rating / 2.0).toFixed(1)}
                             readOnly
                             precision={0.1}
                             emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
@@ -144,7 +144,7 @@ function MovieDetail() {
                             bgcolor: deepOrange[500],
                             fontSize: 14,
                             ml: 4
-                        }}>{movie.rating.toFixed(1)}
+                        }}>{state.avg_rating !== null ? state.avg_rating : 0 }
                     </Avatar>
                 </Stack>
                 <Box p={2} component="p">{movie.description}</Box>
@@ -154,11 +154,16 @@ function MovieDetail() {
                     </Button>
                   <FormControlLabel control={
                     <IconButton aria-label="add to watchlist" onClick={handleAddToWatchlistClick}>
-                        <FavoriteIcon sx={{color: grey[400]}} fontSize="large"/>
+                        <PlaylistAddIcon sx={{color: grey[400]}} fontSize="large"/>
                     </IconButton>
                      } label="Add to My Movies" labelPlacement="start"/>
                     {/* Display the error message */}
-              {state.error && <Typography color="error">{state.error}</Typography>}
+                    {state.addToWatchlistSuccess && (
+                        <Typography variant="body2" color="text.secondary">
+                            Movie added to watchlist successfully!
+                        </Typography>
+                        )}
+                    {state.error && <Typography color="error">{state.error}</Typography>}
                 </Box>
 
                 {/* Dialog/Modal to show the video player */}
@@ -175,13 +180,13 @@ function MovieDetail() {
                       
                       <Box flexGrow={1} />
                       <Rating
-                        value={newRating !== undefined ? newRating : 0}
+                        value={newRating !== null ? newRating : 0}
                         onChange={(event) => handleRatingChange(event)}
                         precision={0.1}
                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                         />
                       <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
-                      >{(newRating * 2.0 || parseFloat(movie.rating).toFixed(1)) }
+                      >{newRating !== null ? newRating : 0 }
                       </Typography>
                     </Stack>
             <Stack direction="row" mb={1}>
@@ -207,7 +212,7 @@ function MovieDetail() {
                             </Typography>
                             
                             <Box flexGrow={1} />
-                            <Rating sx={{fontSize: 24, mr: 2}} value={review.rating / 2}
+                            <Rating sx={{fontSize: 24, mr: 2}} value={review.rating}
                                 readOnly
                                 precision={0.1}
                                 emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>

@@ -38,6 +38,27 @@ module.exports = db => {
     });
   });
 
+  //Get average rating by movie_id
+  router.get("/avg_rating/:movieId", (request, response) => {
+    const movieId = request.params.movieId;
+    db.query(`
+      SELECT 
+      AVG(reviews.rating) as avg_rating
+      FROM reviews
+      WHERE movie_id = $1
+      GROUP BY 
+      reviews.movie_id
+    `,[movieId]).then(({ rows }) => {
+      if (rows.length > 0) {
+        const avgRating = parseFloat(rows[0].avg_rating).toFixed(1);
+        response.json({ avg_rating: avgRating });
+      } else {
+        response.json({ avg_rating: null });
+        console.log("No reviews found for the movie.");
+      }
+    });
+  });
+
     //Get reviews by movie_id && user_id
     router.get("/reviews/:movieId/:userId", (request, response) => {
       const movieId = request.params.movieId;
@@ -90,11 +111,12 @@ module.exports = db => {
   router.patch("/myreviews/:reviewId", (request, response) => {
     const reviewId = request.params.reviewId;
     const { updatedReview,updatedRating }  = request.body;
+    console.log("updatedRating in update my review db ", updatedRating);
     db.query(`
       UPDATE reviews
       SET review = $1, rating = $2 
       WHERE id = $3
-    `,[updatedReview, updatedRating * 2.0, reviewId]).then(() => {
+    `,[updatedReview, updatedRating, reviewId]).then(() => {
       response.sendStatus(200); 
     })
     .catch((error) => {
@@ -152,7 +174,7 @@ module.exports = db => {
         RETURNING *,
         (SELECT username FROM users WHERE id = $4) as username;
       `,
-        [movieId, newRating * 2.0, newReview, userId]
+        [movieId, newRating, newReview, userId]
       );
       const insertedReview = result.rows[0]; 
       response.status(200).json(insertedReview); 

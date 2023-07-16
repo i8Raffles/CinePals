@@ -8,8 +8,10 @@ const useMovieDetail = (movieId) => {
   const [state, setState] = useState({
     movie: {},
     reviews: [],
+    avg_rating: 0,
     loading: true,
     error: null,
+    addToWatchlistSuccess:null,
   });
 
   const updateReviews = (newReviewData) => {
@@ -25,22 +27,27 @@ const useMovieDetail = (movieId) => {
       try {
         const movieResponse = await axios.get(`/movie_details/${movieId}`);
         const reviewsResponse = await axios.get(`/api/reviews/${movieId}`);
+        const ratingResponse = await axios.get(`/api/avg_rating/${movieId}`);
         // console.log("Movie data from the API response:", movieResponse.data);
         // console.log("Reviews data from the API response:", reviewsResponse.data);
 
         setState({
           movie: movieResponse.data,
           reviews: reviewsResponse.data,
+          avg_rating: ratingResponse.data.avg_rating,
           loading: false,
           error: null,
+          addToWatchlistSuccess:null,
         });
       } catch (error) {
         console.error("Error fetching movie and reviews:", error);
         setState({
           movie: {},
           reviews: [],
+          avg_rating: 0,
           loading: false,
           error: error.message,
+          addToWatchlistSuccess:null,
         });
       }
     };
@@ -50,7 +57,7 @@ const useMovieDetail = (movieId) => {
 
   const handleSubmit = (newReview, newRating) => {
   //   console.log("newReview:", newReview);
-  // console.log("newRating:", newRating);
+  console.log("newRating in handleSubmit:", newRating);
   // console.log("Type of newRating:", typeof newRating);
     
   //   console.log(`newReview: ${newReview}`);
@@ -59,46 +66,45 @@ const useMovieDetail = (movieId) => {
       newRating: parseFloat(newRating)
     };
 
-  axios
-  .get(`/api/reviews/${movieId}/${userId}`)
-  .then((response) => {
-    const existingReviews = response.data;
-    console.log("existingReviews ? ", existingReviews);
+    axios
+    .get(`/api/reviews/${movieId}/${userId}`)
+    .then((response) => {
+      const existingReviews = response.data;
+      console.log("existingReviews ? ", existingReviews);
 
-    if (existingReviews && existingReviews.length > 0) {
-      setState((prevState) => ({
-        ...prevState,
-        error: "You have did a review on this movie.",
-      }));
-      console.error("Error: Review already exists for this movie and user");
-    } else {
-      // Post the new review since it doesn't already exist
-      axios
-        .post(`/api/reviews/${movieId}/${userId}`, newData)
-        .then((response) => {
-          console.log("Add new review successfully");
-          console.log("Add review response.data", response.data);
+      if (existingReviews && existingReviews.length > 0) {
+        setState((prevState) => ({
+          ...prevState,
+          error: "You have did a review on this movie.",
+        }));
+        console.error("Error: Review already exists for this movie and user");
+      } else {
+        // Post the new review since it doesn't already exist
+        axios
+          .post(`/api/reviews/${movieId}/${userId}`, newData)
+          .then((response) => {
+            console.log("Add new review successfully");
+            console.log("Add review response.data", response.data);
 
-          updateReviews({
-            id: response.data.id,
-            rating: newRating,
-            review: newReview,
-            created_at: response.data.created_at,
-            username: response.data.username
+            updateReviews({
+              id: response.data.id,
+              rating: newRating,
+              review: newReview,
+              created_at: response.data.created_at,
+              username: response.data.username
+            });
+          })
+          .catch((error) => {
+            console.error("Error adding new review:", error);
           });
-        })
-        .catch((error) => {
-          console.error("Error adding new review:", error);
-        });
-    }
-  })
-  .catch((error) => {
-    console.error("Error fetching existing reviews:", error);
-  });
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching existing reviews:", error);
+    });
     
   };
-  
-  const handleAddToWatchlist = () => {
+    const handleAddToWatchlist = () => {
 
     axios
       .get(`/api/watchlists/${movieId}/${userId}`)
@@ -117,6 +123,10 @@ const useMovieDetail = (movieId) => {
           .post(`/api/watchlists/${movieId}/${userId}`)
           .then((response) => {
             console.log("Movie added to watchlist");
+            setState((prevState)=>({
+              ...prevState,
+              addToWatchlistSuccess: true
+            }));
           })
           .catch((error) => {
             if (error.response && error.response.status === 409) {
@@ -137,7 +147,8 @@ const useMovieDetail = (movieId) => {
   };
 
   // console.log("state in useMovieDetail ", state);
-  console.log("reviews in useMovieDetail ", state.reviews);
+  // console.log("reviews in useMovieDetail ", state.reviews);
+  console.log("state.AVG_RATING in useMovieDetail ", state.avg_rating);
   return { state, handleSubmit, handleAddToWatchlist };
 };
 
