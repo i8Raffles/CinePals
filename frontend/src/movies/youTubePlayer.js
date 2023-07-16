@@ -23,5 +23,3 @@ function YouTubePlayer({ videoId, onClose }) {
 }
 
 export default YouTubePlayer;
-
-
