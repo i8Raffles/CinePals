@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const axios = require('axios');
+const config = require('../config');
 module.exports = db => {
   router.get("/reviews", (request, response) => {
     db.query(`
@@ -32,8 +34,29 @@ module.exports = db => {
       WHERE movie_id = $1;
     `,[movieId]).then(({ rows:reviews }) => {
       response.json(reviews);
+      console.log(reviews);
     });
   });
+
+    //Get reviews by movie_id && user_id
+    router.get("/reviews/:movieId/:userId", (request, response) => {
+      const movieId = request.params.movieId;
+      const userId = request.params.userId;
+      db.query(`
+        SELECT 
+        reviews.id,
+        reviews.movie_id,
+        reviews.rating,
+        reviews.review,
+        reviews.created_at,
+        reviews.user_id
+        FROM reviews
+        WHERE movie_id = $1 AND user_Id = $2;
+      `,[movieId, userId]).then(({ rows:reviews }) => {
+        response.json(reviews);
+        console.log(reviews);
+      });
+    });
 
   //get reviews and movies by userId
   router.get("/myreviews/:userId", (request, response) => {
@@ -81,22 +104,62 @@ module.exports = db => {
  
   });
 
-  //Add review by movie_id & user_id
-  router.post("/reviews/:movieId/:userId", (request, response) => {
+  //Add review by movie_id & user_id && add movie to movies table
+  router.post("/reviews/:movieId/:userId", async (request, response) => {
     const movieId = request.params.movieId;
     const userId = request.params.userId
     const { newReview,newRating }  = request.body;
     console.log("add review: ", movieId, userId, newRating, newReview);
-    db.query(`
-      INSERT INTO reviews (movie_id, rating, review, user_id)
-      VALUES ($1, $2, $3, $4)
-    `,[movieId, newRating * 2.0, newReview, userId]).then(() => {
-      response.sendStatus(200); 
-    })
-    .catch((error) => {
+
+    try {
+      // Fetch movie details from the external API
+      const options = {
+        method: 'GET',
+        url: `https://api.themoviedb.org/3/movie/${movieId}`,
+        params: {
+          language: 'en-US'
+        },
+        headers: {
+          accept: config.api.accept,
+          Authorization: config.api.authorization
+        }
+      };
+      const movieResponse = await axios.request(options);
+      const movieDetails = movieResponse.data;
+      //Save the movie detail to movies table
+      db.query(
+        `
+        INSERT INTO movies (movie_id, original_title, title, overview, poster_path, vote_average, release_date)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        ON CONFLICT (movie_id) DO NOTHING
+      `,
+        [
+          movieDetails.id,
+          movieDetails.original_title,
+          movieDetails.title,
+          movieDetails.overview,
+          movieDetails.poster_path,
+          movieDetails.vote_average,
+          movieDetails.release_date
+        ]
+      );
+  
+      // Save the review to the reviews table
+      const result = await db.query(
+        `
+        INSERT INTO reviews (movie_id, rating, review, user_id)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *,
+        (SELECT username FROM users WHERE id = $4) as username;
+      `,
+        [movieId, newRating * 2.0, newReview, userId]
+      );
+      const insertedReview = result.rows[0]; 
+      response.status(200).json(insertedReview); 
+    } catch (error) {
       console.error(error);
-      response.sendStatus(500); 
-    });
+      response.sendStatus(500);
+    }
  
   });
 
