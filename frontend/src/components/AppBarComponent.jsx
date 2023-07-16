@@ -80,7 +80,19 @@ function AppBarComponent(props) {
 
     const user = useContext(AuthContext);
 
-    const settings = !!(user?.userName) ? ['My movies', 'My reviews', 'My follows', 'Profile'] : ['Login', 'Register'];
+    // const settings = !!(user?.userName) ? ['My movies', 'My reviews', 'My follows', 'Profile'] : ['Login', 'Register'];
+    const settings = !!(user?.userName)
+  ? [
+      { label: "My movies", link: "/my/movies" },
+      { label: "My reviews", link: "/my/reviews" },
+      { label: "My follows", link: "/my/follows" },
+      { label: "Profile", link: "/my/profile" },
+    ]
+  : [
+      { label: "Login", link: "/login" },
+      { label: "Register", link: "/register" },
+    ];
+
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') {
         navigate(`/movies/search/${searchText}`);
@@ -137,8 +149,8 @@ function AppBarComponent(props) {
                         onClose={handleCloseUserMenu}
                     >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
-                                <Typography textAlign="center">{setting}</Typography>
+                            <MenuItem key={setting.label} component={Link} to={setting.link} onClick={() => handleCloseUserMenu(setting)}>
+                                <Typography textAlign="center">{setting.label}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
