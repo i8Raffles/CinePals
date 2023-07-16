@@ -94,10 +94,10 @@ function MovieDetail(props) {
                 </Stack>
                 <Box sx={{mt: 4}} component="div">
                     <FormControlLabel control={
-                        <IconButton aria-label="add to favorites">
+                        <IconButton aria-label="add to watchlist">
                             <FavoriteIcon sx={{color: grey[400]}} fontSize="large"/>
                         </IconButton>
-                    } label="Add to favorites" labelPlacement="start"/>
+                    } label="Add to Watchlist" labelPlacement="start"/>
                 </Box>
             </Paper>
         </Box>
