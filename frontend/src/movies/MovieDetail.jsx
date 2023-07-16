@@ -26,7 +26,7 @@ import YouTubePlayer from "./youTubePlayer";
 function MovieDetail() {
     const { movieId } = useParams();
     // Memoize the movieId value to prevent unnecessary re-renders
-    const { state, handleSubmit } = useMovieDetail(movieId);
+    const { state, handleSubmit, handleAddToWatchlist } = useMovieDetail(movieId);
     
     // const [newRating, setNewRating] = useState({});
     const [newRating, setNewRating] = useState(0);
@@ -35,6 +35,9 @@ function MovieDetail() {
     // console.log("state in MovieDetail :", state);
     const reviews = state.reviews;
     // console.log("reviews of this movie in MovieDetail :", state.reviews);
+    const handleAddToWatchlistClick = () => {
+        handleAddToWatchlist();
+      };
 
     const youtubeVideoId = state.movie.trailer;
 
@@ -149,10 +152,12 @@ function MovieDetail() {
                     Play Trailer
                     </Button>
                   <FormControlLabel control={
-                    <IconButton aria-label="add to favorites">
+                    <IconButton aria-label="add to watchlist" onClick={handleAddToWatchlistClick}>
                         <FavoriteIcon sx={{color: grey[400]}} fontSize="large"/>
                     </IconButton>
                      } label="Add to My Movies" labelPlacement="start"/>
+                    {/* Display the error message */}
+              {state.error && <Typography color="error">{state.error}</Typography>}
                 </Box>
 
                 {/* Dialog/Modal to show the video player */}
