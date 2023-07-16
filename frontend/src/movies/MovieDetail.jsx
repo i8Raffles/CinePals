@@ -113,7 +113,7 @@ function MovieDetail() {
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
                     {/* <Typography variant="span">{movie.genres.join(', ')}</Typography> */}
                 </Box>
-                <Box p={2} component="p">{movie.description}</Box>
+                
                 <Stack direction="row" alignItems="center">
                     <FormControlLabel control={
                         <Rating sx={{fontSize: 32, ml: 1, color: blueGrey[400]}} value={movie.rating / 2}
@@ -147,6 +147,7 @@ function MovieDetail() {
                         }}>{movie.rating.toFixed(1)}
                     </Avatar>
                 </Stack>
+                <Box p={2} component="p">{movie.description}</Box>
                 <Box mt={2}>
                     <Button variant="contained" color="primary" onClick={handlePlayTrailer}>
                     Play Trailer
