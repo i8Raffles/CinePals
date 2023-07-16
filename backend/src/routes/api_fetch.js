@@ -131,16 +131,6 @@ router.get('/movie_details/:movieId', async (req, res) => {
     }
   };
   
-
-  // try {
-  //   const response = await axios.request(options);
-  //   const trailer_response = await axios.request(options2);
-  //   res.json(response.data, trailer_response.data);
-  //   console.log("api fetch ", response.data);
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ error: 'An error occurred' });
-  // }
   try {
     const [response, trailerResponse] = await Promise.all([
       axios.request(options),
@@ -152,7 +142,13 @@ router.get('/movie_details/:movieId', async (req, res) => {
     // console.log("trailerData ", trailerData.results);
     
     const officialTrailer = trailerData.results.find(trailer => trailer.name === "Official Trailer");
-    const trailerKey = officialTrailer.key;
+    // const trailerKey = officialTrailer.key;
+
+    // If "Official Trailer" is not found, try to find any other trailer
+    const trailer = officialTrailer || trailerData.results.find((trailer) => trailer.type === "Teaser");
+
+// If a trailer is found, get its key
+const trailerKey = trailer ? trailer.key : null;
 
     // Combine the movie details and trailer data into a single object
     const movieDetailsWithTrailer = {
