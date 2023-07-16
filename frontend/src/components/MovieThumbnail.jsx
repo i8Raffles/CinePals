@@ -9,20 +9,46 @@ import {
     Rating,
     Typography
 } from "@mui/material";
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import StarIcon from '@mui/icons-material/Star';
-import {deepOrange, red} from "@mui/material/colors";
+import {deepOrange, red, grey} from "@mui/material/colors";
 import { Link } from "react-router-dom";
+import React, { useState  } from "react";
+import axios from "axios";
 
 function MovieThumbnail(props) {
+    const [state, setState] = useState({
+        addToWatchlistSuccess: false,
+        addToWatchlistError: null,
+      });
+      const handleAddToWatchlistClick = () => {
+        const movieId = props.movie.movie_id; // Get the movieId from props
+        const userId = 1; // Replace this with the actual userId
+    
+        axios
+          .post(`/api/watchlists/${movieId}/${userId}`)
+          .then((response) => {
+            console.log("Movie added to watchlist");
+            setState({
+              addToWatchlistSuccess: true,
+              addToWatchlistError: null,
+            });
+          })
+          .catch((error) => {
+            console.error("Error adding movie to watchlist:", error);
+            setState({
+              addToWatchlistSuccess: false,
+              addToWatchlistError: "This movie already in the watchlist",
+            });
+          });
+      };
+
     return <Card sx={{
         p: 1,
         overflow: 'hidden',
         flexGrow: 1, flexShrink: 0,
-        width: '100%', flexBasis: 'auto' }}>
-        <CardHeader sx={{ whiteSpace: 'nowrap' }} avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{props.movie.name[0]}</Avatar>
-        } title={props.movie.name} subheader={props.movie.releaseDate}/>
+        width: '100%', flexBasis: 'auto'}}>
+        
         <Link to={'/movies/' + props.movie.movie_id}>
             <CardMedia
                 component="img"
@@ -31,20 +57,48 @@ function MovieThumbnail(props) {
                 alt={props.movie.name}
             />
         </Link>
-        <CardContent sx={{ height: 80, overflow: 'hidden' }}>
-            <Typography variant="body2" color="text.secondary">
-                {props.movie.description}
-            </Typography>
-        </CardContent>
+        {/* <CardHeader sx={{ whiteSpace: 'nowrap' }} avatar={
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{props.movie.name[0]}</Avatar>
+        } title={props.movie.name} subheader={props.movie.releaseDate}/> */}
+        <CardHeader
+        sx={{ whiteSpace: "nowrap" }}
+        title={
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "16px", lineHeight: "1.2", maxHeight: "2.4em", overflow: "hidden", textOverflow: "ellipsis" }}
+            title={props.movie.name} // Show full title on hover
+          >
+            {props.movie.name}
+          </Typography>
+        }
+        subheader={props.movie.releaseDate}
+      />
         <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-                <FavoriteIcon />
+            <IconButton aria-label="add to watchlist" onClick={handleAddToWatchlistClick}>
+                {/* <FavoriteIcon /> */}
+                <PlaylistAddIcon/>
             </IconButton>
+
             <Rating value={props.movie.rating / 2} readOnly
                     precision={0.1}
                     emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />} />
             <Avatar sx={{ width: 30, height: 30, bgcolor: deepOrange[500], fontSize: 14, ml: 1 }}>{props.movie.rating}</Avatar>
         </CardActions>
+        {state.addToWatchlistSuccess && (
+          <Typography variant="body2" color="text.secondary">
+            Movie added to watchlist successfully!
+          </Typography>
+        )}
+        {state.addToWatchlistError && (
+          <Typography variant="body2" color="error">
+            {state.addToWatchlistError}
+          </Typography>
+        )}
+        <CardContent sx={{ height: 80, overflow: 'hidden' }}>
+            <Typography variant="body2" color="text.secondary">
+                {props.movie.description}
+            </Typography>
+        </CardContent>
     </Card>
 }
 
