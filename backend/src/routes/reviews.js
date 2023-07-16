@@ -54,7 +54,7 @@ module.exports = db => {
         WHERE movie_id = $1 AND user_Id = $2;
       `,[movieId, userId]).then(({ rows:reviews }) => {
         response.json(reviews);
-        console.log(reviews);
+        console.log("reviews in get reviews by movieid and userid ", reviews);
       });
     });
 
