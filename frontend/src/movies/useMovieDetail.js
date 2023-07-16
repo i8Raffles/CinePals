@@ -12,6 +12,13 @@ const useMovieDetail = (movieId) => {
     error: null,
   });
 
+  const updateReviews = (newReviewData) => {
+    setState((prevState) => ({
+      ...prevState,
+      reviews: [...prevState.reviews, newReviewData],
+    }));
+  };
+
   useEffect(() => {
     // console.log("useEffect is being called");
     const fetchData = async () => {
@@ -51,19 +58,69 @@ const useMovieDetail = (movieId) => {
       newReview: newReview,
       newRating: parseFloat(newRating)
     };
-    axios
-      .post(`/api/reviews/${movieId}/${userId}`, newData)
-      .then((response) => {
-        console.log("add new review successfully");
-      })
-      .catch((error) => {
-        console.error("Error adding new review:", error);
-      });
+    // axios
+    //   .post(`/api/reviews/${movieId}/${userId}`, newData)
+    //   .then((response) => {
+    //     console.log("add new review successfully");
+    //     console.log("add review response.data", response.data);
+      
+    //     updateReviews({
+    //       id: response.data.id, 
+    //       rating: newRating,
+    //       review: newReview,
+    //       created_at: response.data.created_at,
+    //       username: response.data.username
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error adding new review:", error);
+    //   });
+    // Fetch the reviews for the specific movie and user
+  axios
+  .get(`/api/reviews/${movieId}/${userId}`)
+  .then((response) => {
+    const existingReviews = response.data;
+    console.log("existingReviews ? ", existingReviews);
+    // Check if a review already exists for the given movie and user
+    // const reviewExists = existingReviews.some(
+    //   (review) => review.movie_id === movieId && review.user_id === userId
+    // );
+
+    if (existingReviews) {
+      setState((prevState) => ({
+        ...prevState,
+        error: "You have did a review on this movie.",
+      }));
+      console.error("Error: Review already exists for this movie and user");
+    } else {
+      // Post the new review since it doesn't already exist
+      axios
+        .post(`/api/reviews/${movieId}/${userId}`, newData)
+        .then((response) => {
+          console.log("Add new review successfully");
+          console.log("Add review response.data", response.data);
+
+          updateReviews({
+            id: response.data.id,
+            rating: newRating,
+            review: newReview,
+            created_at: response.data.created_at,
+            username: response.data.username
+          });
+        })
+        .catch((error) => {
+          console.error("Error adding new review:", error);
+        });
+    }
+  })
+  .catch((error) => {
+    console.error("Error fetching existing reviews:", error);
+  });
     
   };
   
   // console.log("state in useMovieDetail ", state);
-  // console.log("reviews in useMovieDetail ", state.reviews);
+  console.log("reviews in useMovieDetail ", state.reviews);
   return { state, handleSubmit };
 };
 

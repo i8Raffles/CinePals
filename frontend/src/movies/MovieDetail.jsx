@@ -20,12 +20,14 @@ import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import useMovieDetail from "./useMovieDetail";
 import { useParams } from "react-router-dom";
 import {React, useState} from "react";
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import YouTubePlayer from "./youTubePlayer";
 
 function MovieDetail() {
     const { movieId } = useParams();
+    // Memoize the movieId value to prevent unnecessary re-renders
     const { state, handleSubmit } = useMovieDetail(movieId);
+    
     // const [newRating, setNewRating] = useState({});
     const [newRating, setNewRating] = useState(0);
     const [newReview, setNewReview] = useState("");
@@ -46,11 +48,14 @@ function MovieDetail() {
 
       const handleReviewChange = (event) => {
         setNewReview(event.target.value);
+        console.log("the new Review you are typing is : ", newReview);
       };
 
       const handlePostReview = (newReview, newRating) => {
-        console.log("newRating in handlePostReview", newRating);
+        console.log("newRating in handlePostReview", newRating, "newReview: ", newReview);
         handleSubmit(newReview, newRating);
+        setNewReview("");
+        setNewRating(0);    
 
     };
 
@@ -175,10 +180,13 @@ function MovieDetail() {
                     </Stack>
             <Stack direction="row" mb={1}>
                 <FormControlLabel sx={{alignItems: 'flex-start', flexGrow: 1}} control={
-                    <StyledTextarea sx={{width: '100%'}} minRows={3} value={newReview} onChange={(event) => handleReviewChange(event)}/>
+                    <StyledTextarea sx={{width: '100%'}} minRows={3} value={newReview} onChange={(event) => handleReviewChange(event)}
+                    />
                 } label="Reviews" labelPlacement="top" />
                 <Button onClick={()=>handlePostReview(newReview, newRating)}>Post</Button>
             </Stack>
+            {/* Display the error message */}
+              {state.error && <Typography color="error">{state.error}</Typography>}
             {reviews && reviews.length > 0 && reviews.map(review => (
                 <Box key={review.id} sx={{display: 'flex', flexDirection: 'row', p: 2, gap: 2}}>
                     {/* <Avatar>{comment.user.split(' ').map(w => w[0]).join('')}</Avatar> */}
@@ -186,7 +194,11 @@ function MovieDetail() {
                     <Paper elevation={0} sx={{bgcolor: 'rgb(243, 242, 241)', p: 2 ,width: '100%'}}>
                         <Stack direction="row" alignItems="center" >
                             <Typography variant="span" sx={{ fontWeight: 600 }}>{review.username}</Typography>
-                            <Typography variant="span" sx={{fontSize: 11, color: grey[600], ml: 1}}>{format(new Date(review.created_at), 'yyyy-MM-dd')}</Typography>
+                            <Typography variant="span" sx={{ fontSize: 11, color: grey[600], ml: 1 }}>
+                            {review.created_at && isValid(new Date(review.created_at))
+                                ? format(new Date(review.created_at), 'yyyy-MM-dd')
+                                : 'Invalid Date'}
+                            </Typography>
                             
                             <Box flexGrow={1} />
                             <Rating sx={{fontSize: 24, mr: 2}} value={review.rating / 2}
