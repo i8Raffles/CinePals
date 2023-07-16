@@ -10,7 +10,8 @@ export const defaultState = {
 
 export const ACTION_TYPES = {
     FETCH: 'FETCH',
-    FILTER_CHANGE: 'FILTER_CHANGE'
+    FILTER_CHANGE: 'FILTER_CHANGE',
+    FETCH_MOVIE: 'FETCH_MOVIE'
 }
 
 export function movieListReducer(state, action) {
@@ -26,6 +27,11 @@ export function movieListReducer(state, action) {
                 filter: action.payload,
                 page: 1,
             };
+        case ACTION_TYPES.FETCH_MOVIE:
+            return {
+              ...state,
+              movie: action.payload
+            }
         default: return state;
     }
 }

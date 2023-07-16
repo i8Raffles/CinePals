@@ -1,6 +1,6 @@
 import {genresList} from "./genres";
 
-export function movieApiBuilder(filter, page) {
+export function movieApiBuilder(filter, page, movieId) {
     switch (filter) {
         case FILTER_TYPES.NOW_PLAYING:
             // return 'https://api.themoviedb.org/3/movie/now_playing';
@@ -14,6 +14,8 @@ export function movieApiBuilder(filter, page) {
         case FILTER_TYPES.UPCOMING:
             // return 'https://api.themoviedb.org/3/movie/upcoming';
             return 'http://localhost:8001/movies_upcoming/' + page;
+        case FILTER_TYPES.MOVIE:
+            return 'http://localhost:8001/movie_details/' + movieId;
         default:
             if (!!genresList.find(g => g.id === filter)) {
                 return 'http://localhost:8001/movies_by_genres/' + filter + '/' + page;
@@ -26,7 +28,8 @@ export const FILTER_TYPES = {
     NOW_PLAYING: 'NOW_PLAYING',
     POPULAR: 'POPULAR',
     TOP_RATED: 'TOP_RATED',
-    UPCOMING: 'UPCOMING'
+    UPCOMING: 'UPCOMING',
+    MOVIE: 'MOVIE'
 }
 
 export const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500/';

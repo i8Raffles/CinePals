@@ -12,9 +12,17 @@ import {
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
 import {deepOrange, red} from "@mui/material/colors";
-import { Link } from "react-router-dom";
+import { ACTION_TYPES } from "../movies/movieListReducer";
+import { Link } from 'react-router-dom';
+import { getMovie } from "../movies/useMovieList";
 
 function MovieThumbnail(props) {
+
+    // const onMovieSelected = function (movieId) {
+    //   console.log("Id clicked: " + movieId);
+    //   getMovie(movieId);
+    // };
+
     return <Card sx={{
         p: 1,
         overflow: 'hidden',
@@ -24,6 +32,7 @@ function MovieThumbnail(props) {
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{props.movie.name[0]}</Avatar>
         } title={props.movie.name} subheader={props.movie.releaseDate}/>
         <Link to={'/movies/' + props.movie.id}>
+        {/* <Link onClick={() => onMovieSelected(props.movie.id)}> */}
             <CardMedia
                 component="img"
                 height="150"

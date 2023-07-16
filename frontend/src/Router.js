@@ -10,6 +10,8 @@ import React from "react";
 import MyContainer from "./my/MyContainer";
 import UserContainer from "./user/UserContainer";
 
+
+
 const router = createBrowserRouter([
     {
         element: <RootLayout/>,
@@ -20,7 +22,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/movies/:movieId',
-                element: <MovieDetail/>
+                element: <MovieDetail />
             },
             {
                 element: <MyContainer/>,

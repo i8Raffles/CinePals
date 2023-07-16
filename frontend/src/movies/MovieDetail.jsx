@@ -14,17 +14,29 @@ import StarIcon from "@mui/icons-material/Star";
 import {blueGrey, deepOrange, grey} from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import StyledTextarea from "../components/StyledTextArea";
+import { useEffect } from "react";
+import { ACTION_TYPES } from "./movieListReducer";
+import { useMovie } from "./useMovieList";
+import { IMAGE_BASE_URL } from "../utils/movieApiBuilder";
 
-function MovieDetail({movie, comments}) {
+function MovieDetail(props) {
+  const { comments } = props;
+  const { state, dispatch } = useMovie();
 
+    useEffect(() => {
+      state.movieId = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+      console.log("on initial load with movieId " + state.movieId);
+      dispatch({ type: ACTION_TYPES.FETCH_MOVIE, payload: state.movieId });
+    }, []);
+    
     return <Box>
         <Box sx={{display: 'flex', flexDirection: 'row', gap: 2}}>
             <Box sx={{display: 'inline-flex', alignSelf: 'flex-start', width: 420, flexGrow: 1}} component="div">
-                <img width="100%" alt={movie.name} src={movie.poster}/>
+                <img width="100%" alt={state.movie?.title} src={IMAGE_BASE_URL +(state.movie?.poster_path)}/>
             </Box>
             <Paper variant="outlined" sx={{display: 'flex', gap: 2, p: 2, flexDirection: 'column', flexGrow: 1}}
                    component="div">
-                <Typography variant="h4" sx={{pl: 1}} component="div">{movie.name}</Typography>
+                <Typography variant="h4" sx={{pl: 1}} component="div">{state.movie?.title}</Typography>
                 <Box sx={{
                     pl: 2,
                     display: 'flex',
@@ -38,16 +50,16 @@ function MovieDetail({movie, comments}) {
                     },
                 }}
                      component="div">
-                    <Typography variant="span">{movie.type}</Typography>
+                    <Typography variant="span">{state.movie?.release_date}</Typography>
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
-                    <Typography variant="span">{movie.duration}</Typography>
+                    <Typography variant="span">{state.movie?.runtime + " min"}</Typography>
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
-                    <Typography variant="span">{movie.genres.join(', ')}</Typography>
+                    {state.movie && state.movie.genres && state.movie.genres.map((genre) => genre.name).join(', ')}
                 </Box>
-                <Box p={2} component="p">{movie.description}</Box>
+                <Box p={2} component="p">{state.movie?.overview}</Box>
                 <Stack direction="row" alignItems="center">
                     <FormControlLabel control={
-                        <Rating sx={{fontSize: 32, ml: 1, color: blueGrey[400]}} value={movie.rating / 2}
+                        <Rating sx={{fontSize: 32, ml: 1, color: blueGrey[400]}} value={state.movie?.vote_average / 2}
                                 readOnly
                                 precision={0.1}
                                 emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
@@ -59,11 +71,13 @@ function MovieDetail({movie, comments}) {
                             bgcolor: deepOrange[500],
                             fontSize: 14,
                             ml: 4
-                        }}>{movie.rating}</Avatar>
+                        }}>{state.movie?.vote_average && !isNaN(state.movie.vote_average)
+                          ? state.movie.vote_average.toFixed(1)
+                          : ''}</Avatar>
                 </Stack>
                 <Stack direction="row" alignItems="center">
                     <FormControlLabel control={
-                        <Rating sx={{fontSize: 32, ml: 1}} value={movie.rating / 2}
+                        <Rating sx={{fontSize: 32, ml: 1}} value={state.movie?.vote_average / 2}
                                 precision={0.1}
                                 emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
                     } label="App Rating" labelPlacement="start"/>
@@ -74,7 +88,9 @@ function MovieDetail({movie, comments}) {
                             bgcolor: deepOrange[500],
                             fontSize: 14,
                             ml: 4
-                        }}>{movie.rating}</Avatar>
+                        }}>{state.movie?.vote_average && !isNaN(state.movie.vote_average)
+                          ? state.movie.vote_average.toFixed(1)
+                          : ''}</Avatar>
                 </Stack>
                 <Box sx={{mt: 4}} component="div">
                     <FormControlLabel control={
@@ -139,5 +155,7 @@ MovieDetail.defaultProps = {
         }
     ]
 }
+
+
 
 export default MovieDetail;
