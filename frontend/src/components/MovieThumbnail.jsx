@@ -82,7 +82,7 @@ function MovieThumbnail(props) {
             <Rating value={props.movie.rating / 2} readOnly
                     precision={0.1}
                     emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />} />
-            <Avatar sx={{ width: 30, height: 30, bgcolor: deepOrange[500], fontSize: 14, ml: 1 }}>{props.movie.rating}</Avatar>
+            <Avatar sx={{ width: 30, height: 30, bgcolor: deepOrange[500], fontSize: 14, ml: 1 }}>{props.movie.rating.toFixed(1)}</Avatar>
         </CardActions>
         {state.addToWatchlistSuccess && (
           <Typography variant="body2" color="text.secondary">
