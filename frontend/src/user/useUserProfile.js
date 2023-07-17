@@ -29,6 +29,7 @@ const useUserProfile = (userId,followId) => {
   const fetchUserData = async (followId) =>{
     try {
       const response = await axios.get(`/api/users/${followId}`);
+      console.log("In fetchUserData, followid ", response.data);
       setUser( response.data);
       
     } catch (error){
