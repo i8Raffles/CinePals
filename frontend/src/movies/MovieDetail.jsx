@@ -19,9 +19,10 @@ import StyledTextarea from "../components/StyledTextArea";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import useMovieDetail from "./useMovieDetail";
 import { useParams } from "react-router-dom";
-import {React, useState} from "react";
+import {React, useState, useContext} from "react";
 import { format, isValid } from 'date-fns';
 import YouTubePlayer from "./youTubePlayer";
+import {AuthContext} from "../App";
 
 function MovieDetail() {
     const { movieId } = useParams();
@@ -33,6 +34,8 @@ function MovieDetail() {
     // console.log("state in MovieDetail :", state);
     const reviews = state.reviews;
     // console.log("reviews of this movie in MovieDetail :", state.reviews);
+
+    const user = useContext(AuthContext);
     console.log("state.avg_rating in MovieDetail :", state.avg_rating);
 
     const handleAddToWatchlistClick = () => {
