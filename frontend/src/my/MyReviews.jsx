@@ -88,6 +88,7 @@ function MyReviews() {
                     </Box>
 
                     <Paper elevation={0} sx={{  width: '100%', p: 2, mt: 1 }}>
+                    <Link to={`/user/${m.user_id}/profile`}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Avatar src={m.profile_url} alt={m.username}></Avatar>
                         <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>Written by {m.username} on {new Date(m.created_at).toLocaleDateString('en-US', {
@@ -96,6 +97,7 @@ function MyReviews() {
                           day: '2-digit',
                         })}</Typography>
                       </Box>
+                      </Link>
                       <Stack direction="row" alignItems="center">
 
                         <Box flexGrow={1} />

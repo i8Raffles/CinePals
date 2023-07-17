@@ -18,7 +18,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import StyledTextarea from "../components/StyledTextArea";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import useMovieDetail from "./useMovieDetail";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {React, useState, useContext} from "react";
 import { format, isValid } from 'date-fns';
 import YouTubePlayer from "./youTubePlayer";
@@ -209,10 +209,14 @@ function MovieDetail() {
             {reviews && reviews.length > 0 && reviews.map(review => (
                 <Box key={review.id} sx={{display: 'flex', flexDirection: 'row', p: 2, gap: 2}}>
                     {/* <Avatar>{comment.user.split(' ').map(w => w[0]).join('')}</Avatar> */}
+                    <Link to={`/user/${review.user_id}/profile`}>
                     <Avatar>{review.username.split(' ').map(w => w[0]).join('')}</Avatar>
+                    </Link>
                     <Paper elevation={0} sx={{ p: 2 ,width: '100%'}}>
                         <Stack direction="row" alignItems="center" >
+                            <Link to={`/user/${review.user_id}/profile`}>
                             <Typography variant="span" sx={{ fontWeight: 600 }}>{review.username}</Typography>
+                            </Link>
                             <Typography variant="span" sx={{ fontSize: 11, color: grey[600], ml: 1 }}>
                             {review.created_at && isValid(new Date(review.created_at))
                                 ? format(new Date(review.created_at), 'yyyy-MM-dd')
