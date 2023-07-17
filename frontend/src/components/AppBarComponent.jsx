@@ -12,6 +12,7 @@ import {
 import {LogoutRounded, MovieRounded} from "@mui/icons-material";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -72,9 +73,11 @@ function AppBarComponent(props) {
         <Container maxWidth="xl">
             <Toolbar disableGutters>
                 <MovieRounded fontSize="large" sx={{mr: 1}}/>
+              <Link to="/">
                 <Typography variant="h6" component="div" sx={{mr: 2}}>
                     Movies
                 </Typography>
+              </Link>
                 <Box sx={{flexGrow: 1}}></Box>
                 <Search sx={{mr: 2}}>
                     <SearchIconWrapper>
