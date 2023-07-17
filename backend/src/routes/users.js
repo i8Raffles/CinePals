@@ -114,13 +114,15 @@ module.exports = db => {
   router.post("/addfollows/:userId/:followId", (request, response) => {
     const userId = request.params.userId;
     const followId = request.params.followId;
+    console.log("in add follow post ", userId, followId);
     
     db.query(
       `SELECT COUNT(*) FROM followers WHERE user_id = $1 AND following_id = $2`,
       [userId, followId]
     ).then((result) => {
+        
         const rowCount = result.rows[0].count;
-        if (rowCount === 0) {
+        if (rowCount === "0") {
           // No row exists, so add a new row
           db.query(
             `INSERT INTO followers (user_id, following_id, follow_state)
