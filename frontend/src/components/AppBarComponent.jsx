@@ -66,7 +66,6 @@ function AppBarComponent(props) {
     const [searchText, setSearchText] = React.useState('');
     const navigate = useNavigate();
 
-    const navigate = useNavigate();
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
