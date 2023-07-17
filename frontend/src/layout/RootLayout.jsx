@@ -4,7 +4,7 @@ import {Outlet} from "react-router";
 
 function RootLayout(props) {
     return <Container maxWidth={false} disableGutters>
-        <AppBarComponent />
+        <AppBarComponent {...props} />
         <Container maxWidth="xl" sx={{ p: 2}}>
             <Outlet />
         </Container>

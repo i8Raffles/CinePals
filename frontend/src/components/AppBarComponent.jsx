@@ -12,6 +12,8 @@ import {
 import {LogoutRounded, MovieRounded} from "@mui/icons-material";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import {useContext} from "react";
+import {AuthContext} from "../App";
 import { Link } from 'react-router-dom';
 import useSearch from '../movies/useSearch';
 // import { useHistory } from 'react-router-dom';
@@ -64,21 +66,27 @@ function AppBarComponent(props) {
     const [searchText, setSearchText] = React.useState('');
     const navigate = useNavigate();
 
+    const navigate = useNavigate();
+
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseUserMenu = () => {
+    const handleCloseUserMenu = (setting) => {
         setAnchorElUser(null);
+        if (setting === "Login") {
+            return navigate("/login");
+        }
     };
 
+    const user = useContext(AuthContext);
+
+    const settings = !!(user?.userName) ? ['My movies', 'My reviews', 'My follows', 'Profile'] : ['Login', 'Register'];
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') {
         navigate(`/movies/search/${searchText}`);
       }
     };
-
-    const settings = !!props.userName ? ['My movies', 'My reviews', 'My follows', 'Profile'] : ['Login', 'Register'];
 
     return <AppBar position="static">
         <Container maxWidth="xl">
@@ -129,12 +137,12 @@ function AppBarComponent(props) {
                         onClose={handleCloseUserMenu}
                     >
                         {settings.map((setting) => (
-                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                            <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
                                 <Typography textAlign="center">{setting}</Typography>
                             </MenuItem>
                         ))}
                     </Menu>
-                    {props.userName &&
+                    {!!user &&
                         <Tooltip title="Sign out">
                             <IconButton
                                 size="large"
@@ -142,6 +150,7 @@ function AppBarComponent(props) {
                                 aria-label="log out"
                                 aria-haspopup="true"
                                 color="inherit"
+                                onClick={props.signOutUser}
                                 sx={{p: 0, ml: 3}}>
                                 <LogoutRounded />
                             </IconButton>
