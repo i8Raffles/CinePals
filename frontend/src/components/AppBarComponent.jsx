@@ -84,6 +84,7 @@ function AppBarComponent(props) {
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') {
         navigate(`/movies/search/${searchText}`);
+        setSearchText('');
       }
     };
 
