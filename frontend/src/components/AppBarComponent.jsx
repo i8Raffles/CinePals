@@ -13,6 +13,9 @@ import {LogoutRounded, MovieRounded} from "@mui/icons-material";
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { Link } from 'react-router-dom';
+import useSearch from '../movies/useSearch';
+// import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -58,6 +61,8 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
 
 function AppBarComponent(props) {
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const [searchText, setSearchText] = React.useState('');
+    const navigate = useNavigate();
 
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -65,6 +70,12 @@ function AppBarComponent(props) {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        navigate(`/movies/search/${searchText}`);
+      }
     };
 
     const settings = !!props.userName ? ['My movies', 'My reviews', 'My follows', 'Profile'] : ['Login', 'Register'];
@@ -86,6 +97,9 @@ function AppBarComponent(props) {
                     <StyledInputBase
                         placeholder="Search…"
                         inputProps={{'aria-label': 'search'}}
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
                 </Search>
                 <Box sx={{flexGrow: 0, mr: 2}}>

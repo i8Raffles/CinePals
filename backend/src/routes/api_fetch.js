@@ -194,5 +194,25 @@ router.get('/movies_by_genres/:genre/:page', async (req, res) => {
   }
 });
 
+router.get('/search_by_name/:searchText', async (req, res) => {
+  const { searchText, page } = req.params;
+  const options = {
+    method: 'GET',
+    url: `https://api.themoviedb.org/3/search/movie?query=${searchText}&page=1`,
+    headers: {
+      accept: config.api.accept,
+      Authorization: config.api.authorization
+    }
+  };
+
+  try {
+    const response = await axios.request(options);
+    res.json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
 
 module.exports = router;

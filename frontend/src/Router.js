@@ -13,6 +13,7 @@ import UserContainer from "./user/UserContainer";
 import UserMovies from "./user/UserMovies";
 import UserReviews from "./user/UserReviews";
 import UserFollows from "./user/UserFollows";
+import SearchResults from "./movies/SearchResults";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: '/movies/:movieId',
                 element: <MovieDetail/>
+            },
+            {
+              path: '/movies/search/:searchText',
+              element: <SearchResults/>
             },
             {
                 element: <MyContainer/>,

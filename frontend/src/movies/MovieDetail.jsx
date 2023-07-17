@@ -77,7 +77,7 @@ function MovieDetail() {
         releaseDate: state.movie.release_date,
         poster: IMAGE_BASE_URL +state.movie.poster_path,
         rating: state.movie.vote_average,
-        genres: state.movie.genres,
+        genres: state.movie.genres ? state.movie.genres.map((genre) => genre.name) : '',
         runtime:state.movie.runtime
 
     };
@@ -111,7 +111,7 @@ function MovieDetail() {
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
                     <Typography variant="span">{movie.runtime} minutes</Typography>
                     <Divider sx={{m: 0}} orientation="vertical" variant="middle" flexItem/>
-                    {/* <Typography variant="span">{movie.genres.join(', ')}</Typography> */}
+                    <Typography variant="span">{movie.genres.join(', ')}</Typography>
                 </Box>
                 <Box p={2} component="p">{movie.description}</Box>
                 <Stack direction="row" alignItems="center">
