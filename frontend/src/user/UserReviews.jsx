@@ -2,10 +2,10 @@ import {React} from "react";
 import { Box, Avatar, Paper, Stack, Typography, Rating} from "@mui/material";
 import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
-import { grey } from "@mui/material/colors";
 import useUserreviews from "./useUserReviews";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import { useParams } from "react-router-dom";
+import StyledTextarea from "../components/StyledTextArea";
 
 
 function UserReviews(props) {
@@ -38,7 +38,7 @@ function UserReviews(props) {
                                     <Typography variant="h5" sx={{ pl: 1 }} component="div">
                                         {m.original_title}
                                     </Typography>
-                                    <Typography variant="span" sx={{ fontSize: 14, color: grey[600], ml: 1 }}>
+                                    <Typography variant="span" sx={{ fontSize: 14, ml: 1 }}>
                                         {new Date(m.release_date).toLocaleDateString('en-US', {
                                             year: 'numeric',
                                             month: '2-digit',
@@ -47,7 +47,7 @@ function UserReviews(props) {
                                     </Typography>
                                 </Box>
 
-                                <Paper elevation={0} sx={{  width: '100%', bgcolor: 'rgb(243, 242, 241)', p: 2, mt: 1 }}>
+                                <Paper elevation={0} sx={{  width: '100%', p: 2, mt: 1 }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         <Avatar src={m.profile_url} alt={m.username}></Avatar>
                                         <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>Written by {m.username} on {new Date(m.created_at).toLocaleDateString('en-US', {
@@ -65,12 +65,12 @@ function UserReviews(props) {
                                             readOnly
                                             emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                                         />
-                                        <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                                        <Typography variant="h7" sx={{ fontWeight: 'bold' }}
                                         >{parseFloat(m.rating)}
                                         </Typography>
                                     </Stack>
                                     <Paper sx={{ width: '100%' }}>
-                          <textarea
+                          <StyledTextarea
                               value={m.review}
                               readOnly
                               style={{ width: '100%', minHeight: '100px', resize: 'vertical' }}

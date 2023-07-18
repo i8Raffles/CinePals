@@ -1,17 +1,6 @@
-import {Outlet, useMatch, useResolvedPath} from "react-router";
-import {Button, Link} from "@mui/material";
-import {NavLink} from "react-router-dom";
+import {Outlet} from "react-router";
+import MyLink from "../components/MyLink";
 
-function MyLink(props) {
-    let resolved = useResolvedPath(props.to);
-    let match = useMatch({ path: resolved.pathname, end: true });
-
-    return <Button color={match ? "primary" : "inherit"}
-                   component={NavLink}
-                   to={props.to}>
-        {props.children}
-    </Button>
-}
 
 function MyContainer(props) {
     return (

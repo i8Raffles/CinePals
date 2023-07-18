@@ -2,6 +2,7 @@ import {Outlet} from "react-router";
 import { styled } from "@mui/system";
 import { NavLink } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import MyLink from "../components/MyLink";
 
 const StyledNavLink = styled(NavLink)(({ theme }) => ({
     textDecoration: "none",
@@ -27,16 +28,16 @@ function UserContainer(props) {
           <nav style={{ display: "flex", justifyContent: "space-between" }}>
             <ul style={{ display: "flex", listStyle: "none", padding: 0 }}> 
               <li>
-              <StyledNavLink to={`/user/${userId}/profile`} activeclassname="active">User Profile</StyledNavLink>
+              <MyLink to={`/user/${userId}/profile`} >User Profile</MyLink>
               </li>
               <li>
-              <StyledNavLink to={`/user/${userId}/movies`} activeclassname="active">User Movies</StyledNavLink>
+              <MyLink to={`/user/${userId}/movies`} >User Movies</MyLink>
               </li>
               <li>
-              <StyledNavLink to={`/user/${userId}/reviews`} activeclassname="active">User Reviews</StyledNavLink>
+              <MyLink to={`/user/${userId}/reviews`} >User Reviews</MyLink>
               </li>
               <li>
-              <StyledNavLink to={`/user/${userId}/follows`} activeclassname="active">User Follows</StyledNavLink>
+              <MyLink to={`/user/${userId}/follows`} >User Follows</MyLink>
               </li>
             </ul>
           </nav>
