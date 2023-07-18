@@ -1,10 +1,10 @@
 import {React, useState, useEffect} from "react";
-import { Box, Avatar, Paper, Stack, Typography, Rating, Button} from "@mui/material";
+import {Box, Avatar, Paper, Stack, Typography, Rating, Button, TextareaAutosize} from "@mui/material";
 import { Link } from "react-router-dom";
 import StarIcon from "@mui/icons-material/Star";
-import { grey } from "@mui/material/colors";
 import useMyreviews from "./useMyReviews";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
+import StyledTextarea from "../components/StyledTextArea";
 
 
 function MyReviews() {
@@ -78,7 +78,7 @@ function MyReviews() {
                       <Typography variant="h5" sx={{ pl: 1 }} component="div">
                         {m.original_title}
                       </Typography>
-                      <Typography variant="span" sx={{ fontSize: 14, color: grey[600], ml: 1 }}>
+                      <Typography variant="span" sx={{ fontSize: 14, ml: 1 }}>
                         {new Date(m.release_date).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: '2-digit',
@@ -87,7 +87,7 @@ function MyReviews() {
                       </Typography>
                     </Box>
 
-                    <Paper elevation={0} sx={{  width: '100%', bgcolor: 'rgb(243, 242, 241)', p: 2, mt: 1 }}>
+                    <Paper elevation={0} sx={{  width: '100%', p: 2, mt: 1 }}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Avatar src={m.profile_url} alt={m.username}></Avatar>
                         <Typography variant="span" sx={{ fontWeight: 600, ml: 1 }}>Written by {m.username} on {new Date(m.created_at).toLocaleDateString('en-US', {
@@ -106,14 +106,14 @@ function MyReviews() {
                             precision={0.1}
                             emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                         />
-                        <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                        <Typography variant="h7" sx={{ fontWeight: 'bold' }}
                         >
                           {/* {(updatedRatings[m.id]|| parseFloat(m.rating)) } */}
                           {(updatedRatings[m.id] !== undefined ? updatedRatings[m.id] : parseFloat(m.rating).toFixed(1))}
                         </Typography>
                       </Stack>
                       <Paper sx={{ width: '100%' }}>
-                      <textarea
+                      <StyledTextarea
                           value={m.review}
                           onChange={(event) => handleReviewChange(event, m.id)}
                           style={{ width: '100%', minHeight: '100px', resize: 'vertical' }}
@@ -122,12 +122,6 @@ function MyReviews() {
 
                     </Paper>
                     <Button onClick={() => handleEdit(m.id, m.review)} sx={{
-
-                      backgroundColor: "rgb(117, 135, 161)",
-                      color: "white",
-                      "&:hover": {
-                        backgroundColor: "rgb(25, 118, 210)",
-                      },
                       width: "200px",
                       margin: "0 auto",
                     }}>Save Update</Button>
@@ -136,7 +130,7 @@ function MyReviews() {
             ))}
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               {error && (
-                  <Typography variant="span" sx={{ color: "red", mt: 1,alignItems: 'center' }}>
+                  <Typography variant="span" sx={{ mt: 1,alignItems: 'center' }}>
                     {error}
                   </Typography>
               )}

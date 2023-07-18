@@ -1,23 +1,17 @@
-import {Outlet} from "react-router";
-import { styled } from "@mui/system";
-import { NavLink } from "react-router-dom";
+import {Outlet, useMatch, useResolvedPath} from "react-router";
+import {Button, Link} from "@mui/material";
+import {NavLink} from "react-router-dom";
 
-const StyledNavLink = styled(NavLink)(({ theme }) => ({
-  textDecoration: "none",
-  color: "black",
-  backgroundColor: "rgba(0, 0, 0, 0.08)",
-  borderRadius: "10px",
-  padding: "5px 10px",
-  marginRight: "10px",
-  fontSize: "18px",
-  "&:hover": {
-    backgroundColor: "lightgray",
-  },
-  "&.active": {
-    backgroundColor: "rgb(25, 118, 210)",
-    color: "white"
-  },
-}));
+function MyLink(props) {
+    let resolved = useResolvedPath(props.to);
+    let match = useMatch({ path: resolved.pathname, end: true });
+
+    return <Button color={match ? "primary" : "inherit"}
+                   component={NavLink}
+                   to={props.to}>
+        {props.children}
+    </Button>
+}
 
 function MyContainer(props) {
     return (
@@ -25,16 +19,16 @@ function MyContainer(props) {
           <nav style={{ display: "flex", justifyContent: "space-between" }}>
             <ul style={{ display: "flex", listStyle: "none", padding: 0 }}> 
               <li>
-              <StyledNavLink to="/my/profile" activeclassname="active">My Profile</StyledNavLink>
+              <MyLink to="/my/profile">My Profile</MyLink>
               </li>
               <li>
-              <StyledNavLink to="/my/movies" activeclassname="active">My Movies</StyledNavLink>
+              <MyLink to="/my/movies">My Movies</MyLink>
               </li>
               <li>
-              <StyledNavLink to="/my/reviews" activeclassname="active">My Reviews</StyledNavLink>
+              <MyLink to="/my/reviews">My Reviews</MyLink>
               </li>
               <li>
-              <StyledNavLink to="/my/follows" activeclassname="active">My Follows</StyledNavLink>
+              <MyLink to="/my/follows">My Follows</MyLink>
               </li>
             </ul>
           </nav>
