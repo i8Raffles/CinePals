@@ -106,7 +106,7 @@ function AppBarComponent(props) {
                 <MovieRounded fontSize="large" sx={{mr: 1}}/>
               <Link to="/">
                 <Typography variant="h6" component="div" sx={{mr: 2}}>
-                    Movies
+                    CinePals
                 </Typography>
               </Link>
                 <Box sx={{flexGrow: 1}}></Box>
