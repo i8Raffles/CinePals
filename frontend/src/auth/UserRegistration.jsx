@@ -6,7 +6,7 @@ import {
     Input,
     InputAdornment,
     InputLabel,
-    Paper, ThemeProvider,
+    Paper,
     Typography
 } from "@mui/material";
 import { withStyles } from "@mui/styles"
@@ -115,9 +115,7 @@ function UserRegistration(props) {
 const StyledUserRegistration = withStyles(styles)(UserRegistration);
 
 function StyledRegistrationWithTheme(props) {
-    return <ThemeProvider theme={theme}>
-        <StyledUserRegistration {...props} />
-    </ThemeProvider>
+    return <StyledUserRegistration {...props} />
 }
 
 export default StyledRegistrationWithTheme;

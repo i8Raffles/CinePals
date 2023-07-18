@@ -36,10 +36,6 @@ function MovieFilter(props) {
                 flexWrap: 'wrap',
             }}>
                 {genresList.map(genres => (<Chip
-                    sx={{
-                        color: props.current === genres.id ? 'inherit' : 'rgba(0, 0, 0, 0.87)',
-                        bgcolor: props.current === genres.id ? 'rgb(25, 118, 210)' : 'inherit'
-                    }}
                     key={genres.id}
                     size="small"
                     variant="outlined"

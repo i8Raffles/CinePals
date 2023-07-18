@@ -35,6 +35,8 @@ function MovieDetail() {
     const reviews = state.reviews;
     // console.log("reviews of this movie in MovieDetail :", state.reviews);
 
+    const [hover, setHover] = useState(-1);
+
     const user = useContext(AuthContext);
     console.log("state.avg_rating in MovieDetail :", state.avg_rating);
 
@@ -70,7 +72,7 @@ function MovieDetail() {
         console.log("set New Rating is ", updatedRating);
         setNewRating(updatedRating);
       };
-    
+
 
     const movie ={
         id: state.movie.id,
@@ -183,13 +185,16 @@ function MovieDetail() {
                       
                       <Box flexGrow={1} />
                       <Rating
-                        value={newRating !== null ? newRating : 0}
+                        value={newRating !== null ? newRating / 2 : 0}
                         onChange={(event) => handleRatingChange(event)}
+                        onChangeActive={(event, newHover) => {
+                            setHover(newHover * 2);
+                        }}
                         precision={0.1}
                         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
                         />
-                      <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
-                      >{newRating !== null ? newRating : 0 }
+                      <Typography variant="h7" sx={{ ml:2, fontWeight: 'bold', width: '28px' }}
+                      >{hover >= 0 ? hover: (newRating || 0)}
                       </Typography>
                     </Stack>
             <Stack direction="row" mb={1}>
@@ -205,7 +210,7 @@ function MovieDetail() {
                 <Box key={review.id} sx={{display: 'flex', flexDirection: 'row', p: 2, gap: 2}}>
                     {/* <Avatar>{comment.user.split(' ').map(w => w[0]).join('')}</Avatar> */}
                     <Avatar>{review.username.split(' ').map(w => w[0]).join('')}</Avatar>
-                    <Paper elevation={0} sx={{bgcolor: 'rgb(243, 242, 241)', p: 2 ,width: '100%'}}>
+                    <Paper elevation={0} sx={{ p: 2 ,width: '100%'}}>
                         <Stack direction="row" alignItems="center" >
                             <Typography variant="span" sx={{ fontWeight: 600 }}>{review.username}</Typography>
                             <Typography variant="span" sx={{ fontSize: 11, color: grey[600], ml: 1 }}>
@@ -219,7 +224,7 @@ function MovieDetail() {
                                 readOnly
                                 precision={0.1}
                                 emptyIcon={<StarIcon style={{opacity: 0.55}} fontSize="inherit"/>}/>
-                            <Typography variant="h7" sx={{ color: 'black', fontWeight: 'bold' }}
+                            <Typography variant="h7" sx={{ fontWeight: 'bold' }}
                             >{review.rating }
                             </Typography>
                         </Stack>
