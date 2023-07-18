@@ -149,7 +149,7 @@ function MovieDetail() {
                             bgcolor: deepOrange[500],
                             fontSize: 14,
                             ml: 4
-                        }}>{state.avg_rating !== null ? state.avg_rating : 0 }
+                        }}>{state.avg_rating !== null ? parseFloat(state.avg_rating).toFixed(1) : 0 }
                     </Avatar>
                 </Stack>
                 <Box p={2} component="p">{movie.description}</Box>

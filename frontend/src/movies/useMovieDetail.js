@@ -59,6 +59,13 @@ const useMovieDetail = (movieId) => {
     fetchData();
   }, [movieId]);
 
+    // Function to calculate the average rating based on the existing reviews
+    const calculateAvgRating = (reviews) => {
+      const totalRating = reviews.reduce((acc, review) => acc + parseFloat(review.rating), 0);
+      const avgRating = totalRating / reviews.length;
+      return avgRating;
+    };
+
   const handleSubmit = (newReview, newRating) => {
   //   console.log("newReview:", newReview);
   console.log("newRating in handleSubmit:", newRating);
@@ -87,17 +94,23 @@ const useMovieDetail = (movieId) => {
         axios
           .post(`/api/reviews/${movieId}/${userId}`, newData)
           .then((response) => {
-            console.log("Add new review successfully");
-            console.log("Add review response.data", response.data);
 
-            updateReviews({
-              id: response.data.id,
-              rating: newRating,
-              review: newReview,
-              created_at: response.data.created_at,
-              username: response.data.username,
-              user_id: response.data.user_id
-            });
+          // Calculate the new average rating by adding the newRating to the existing reviews
+        const updatedReviews = [...state.reviews, {
+          id: response.data.id,
+          rating: newRating,
+          review: newReview,
+          created_at: response.data.created_at,
+          username: response.data.username,
+          user_id: response.data.user_id
+        }];
+        const updatedAvgRating = calculateAvgRating(updatedReviews);
+
+        setState((prevState) => ({
+          ...prevState,
+          reviews: updatedReviews,
+          avg_rating: updatedAvgRating, // Update the avg_rating state with the new average rating
+          }));
           })
           .catch((error) => {
             console.error("Error adding new review:", error);
