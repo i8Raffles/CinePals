@@ -1,4 +1,6 @@
 const router = require("express").Router();
+const bcrypt = require("bcrypt");
+
 module.exports = db => {
   router.get("/users", (request, response) => {
     db.query(`
@@ -173,6 +175,67 @@ module.exports = db => {
       response.sendStatus(500);
     });
   });
+
+  // POST new user into database(REGISTER)
+  router.post("/register", async (request, response) => {
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      profileUrl,
+      profileDescription,
+      password
+    } = request.body;
+
+    try {
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(password, saltRounds);
+
+      const createdUser = await db.query(
+        "INSERT INTO users (first_name, last_name, username, email, profile_url, profile_description, password_hash) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;",
+        [firstName, lastName, username, email, profileUrl, profileDescription, passwordHash]
+      );
+      response.status(201).json(createdUser.rows[0]);
+    } catch (error) {
+      console.error(error);
+      response.status(500).json({ error: "An error occurred." });
+    }
+  });
+
+  // POST user login
+  router.post("/login", async (request, response) => {
+    const { username, password } = request.body;
+
+    try {
+      const { rows } = await db.query(
+        `
+        SELECT *
+        FROM users
+        WHERE username = $1
+      `,
+        [username]
+      );
+
+      if (rows.length === 0) {
+        response.status(401).json({ message: "Invalid credentials" });
+        return;
+      }
+
+      const user = rows[0];
+      const result = await bcrypt.compare(password, user.password_hash);
+
+      if (result) {
+        response.status(200).json({ user });
+      } else {
+        response.status(401).json({ message: "Invalid credentials" });
+      }
+    } catch (error) {
+      console.error(error);
+      response.sendStatus(500);
+    }
+  });
+  
 
   return router;
 };
