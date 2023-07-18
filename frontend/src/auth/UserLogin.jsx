@@ -7,7 +7,7 @@ import {
     Input,
     InputAdornment,
     InputLabel,
-    Paper, ThemeProvider,
+    Paper,
     Typography
 } from "@mui/material";
 import { withStyles } from "@mui/styles"
@@ -102,9 +102,7 @@ function UserLogin(props) {
 const StyledLogin = withStyles(styles)(UserLogin);
 
 function StyledLoginWithTheme(props) {
-    return <ThemeProvider theme={theme}>
-        <StyledLogin {...props} />
-    </ThemeProvider>
+    return <StyledLogin {...props} />
 }
 
 export default StyledLoginWithTheme;
