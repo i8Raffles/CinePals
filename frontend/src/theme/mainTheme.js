@@ -1,8 +1,8 @@
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
+const theme = themeMode => createTheme({
     palette: {
-      mode: 'dark',
+      mode: themeMode,
       // primary: {
       //   // Purple and green play nicely together.
       //   main: 'rgb(25, 118, 210)',

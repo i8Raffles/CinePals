@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import useSearch from '../movies/useSearch';
 // import { useHistory } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import MaterialUISwitch from "./MaterialUISwitch";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -100,6 +101,10 @@ function AppBarComponent(props) {
       }
     };
 
+    const onChangeThemeMode = (event) => {
+        props.changeThemeMode(event.target.checked ? 'dark' : 'light');
+    }
+
     return <AppBar position="static">
         <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -109,6 +114,7 @@ function AppBarComponent(props) {
                     CinePals
                 </Typography>
               </Link>
+                <MaterialUISwitch checked={props.themeMode === 'dark'} onChange={onChangeThemeMode} />
                 <Box sx={{flexGrow: 1}}></Box>
                 <Search sx={{mr: 2}}>
                     <SearchIconWrapper>
