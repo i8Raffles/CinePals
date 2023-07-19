@@ -9,15 +9,17 @@ function useMovieList() {
 
     useEffect(() => {
         const options = {method: 'GET', headers: {accept: 'application/json', authorization: 'Bearer ' + TOKEN}};
-        fetch(movieApiBuilder(state.filter, state.page), options)
+        dispatch( {type: ACTION_TYPES.LOAD_START });
+        fetch(movieApiBuilder(state.searchCriteria.filter, state.searchCriteria.page), options)
             .then(res => res.json())
             .then(json => {
                 dispatch({ type: ACTION_TYPES.FETCH, payload: json.results });
             })
-            .catch(err => console.log);
-    }, [state.filter, state.page]);
-
-    // console.log("in useMovieList, state is ", state);
+            .catch(err => console.log)
+            .finally(() => {
+                dispatch( {type: ACTION_TYPES.LOAD_END });
+            });
+    }, [state.searchCriteria]);
 
     return {state, dispatch};
 }

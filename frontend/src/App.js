@@ -23,15 +23,13 @@ function App() {
         setThemeMode(themeMode);
     }
 
-    return <React.StrictMode>
-        <AuthContext.Provider value={user}>
+    return <AuthContext.Provider value={user}>
             <ThemeProvider theme={theme(themeMode)}>
                 <CssBaseline />
                 <AppRouter loginUser={loginUser} signOutUser={signOutUser}
                            themeMode={themeMode} changeThemeMode={changeThemeMode} />
             </ThemeProvider>
         </AuthContext.Provider>
-    </React.StrictMode>
 }
 
 export default App;
