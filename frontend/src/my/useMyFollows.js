@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 import axios from "axios";
+import {AuthContext} from "../App";
 
 const useMyFollows = () => {
   const [follows, setFollows] = useState([]);
-  const userId = 1; //hard coding
+  const loginUser = useContext(AuthContext);
+  const userId = loginUser.id;
 
   const fetchFollows = async () => {
     try {

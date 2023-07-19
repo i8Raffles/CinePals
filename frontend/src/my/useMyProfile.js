@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 import axios from "axios";
+import {AuthContext} from "../App";
 
 const useMyProfile = () => {
   const [user, setUser] = useState({});
   const [description, setDescription] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const userId = 1; //hard coding
+
+  const loginUser = useContext(AuthContext);
+  const userId = loginUser.id;
 
   useEffect(() => {
     const fetchUserData = async () =>{

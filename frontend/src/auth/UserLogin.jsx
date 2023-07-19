@@ -17,6 +17,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import theme from "../theme/mainTheme";
 import {useNavigate} from "react-router-dom";
 import styles from "./styles";
+import axios from "axios";
 
 
 function UserLogin(props) {
@@ -38,9 +39,14 @@ function UserLogin(props) {
         setUserName(event.target.value);
     }
 
-    const clickLoginUser = (event) => {
+    const clickLoginUser = async (event) => {
         event.preventDefault();
-        props.loginUser({ userName });
+        const result = await axios.post("http://localhost:8001/api/login", {
+            username: userName,
+            password
+        });
+        console.log('login result', result);
+        props.loginUser(result.data.user);
         navigate("/movies");
     };
 

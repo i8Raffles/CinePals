@@ -1,12 +1,14 @@
 
-import React from "react";
+import React, {useContext} from "react";
 import { useParams } from "react-router-dom";
 import { Box, Button, Typography, Avatar } from "@mui/material";
 import useUserProfile from "./useUserProfile";
+import {AuthContext} from "../App";
 
 function UserProfile() {
   const { userId } = useParams();
-  const loginUserId = 1;
+  const loginUser = useContext(AuthContext);
+  const loginUserId = loginUser.id;
   const { user, isFollowed, handleFollow, handleUnfollow } = useUserProfile(loginUserId, userId);
   
 

@@ -1,10 +1,14 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 import axios from "axios";
+import {AuthContext} from "../App";
 // import { useRouteId } from "react-router/dist/lib/hooks";
 
 const useMovieDetail = (movieId) => {
   console.log("in useMovieDetail, movieId is ", movieId);
-  const userId = 1; //hard coding
+
+  const user = useContext(AuthContext);
+  const userId = user.id;
+
   const [state, setState] = useState({
     movie: {},
     reviews: [],
@@ -91,7 +95,8 @@ const useMovieDetail = (movieId) => {
               rating: newRating,
               review: newReview,
               created_at: response.data.created_at,
-              username: response.data.username
+              username: response.data.username,
+              user_id: response.data.user_id
             });
           })
           .catch((error) => {

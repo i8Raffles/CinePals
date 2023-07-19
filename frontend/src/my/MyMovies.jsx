@@ -3,10 +3,13 @@ import useMyMovies from "./useMyMovies";
 import MovieThumbnail from "../components/MovieThumbnail";
 import { IMAGE_BASE_URL } from "../utils/myApiBuilder";
 import { format } from 'date-fns';
+import {AuthContext} from "../App";
+import {useContext} from "react";
 
 
 function MyMovies() {
-  const userId = 1; //hard code
+  const loginUser = useContext(AuthContext);
+  const userId = loginUser.id;
   const { state, deleteMovie } = useMyMovies(userId);
   
   const handleDelete = (userId, movieId) => {

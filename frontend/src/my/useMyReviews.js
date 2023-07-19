@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect, useContext} from "react";
 import axios from "axios";
+import {AuthContext} from "../App";
 
 const useMyReviews = () => {
   const [state, setState] = useState({
@@ -7,7 +8,9 @@ const useMyReviews = () => {
     loading: true,
     error: null,
   });
-  const userId = 1; //hard coding
+
+  const user = useContext(AuthContext);
+  const userId = user.id;
 
   useEffect(() => {
     const fetchMyMovies = async () => {

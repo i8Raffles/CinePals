@@ -81,8 +81,7 @@ function AppBarComponent(props) {
 
     const user = useContext(AuthContext);
 
-    // const settings = !!(user?.userName) ? ['My movies', 'My reviews', 'My follows', 'Profile'] : ['Login', 'Register'];
-    const settings = !!(user?.userName)
+    const settings = !!user
   ? [
       { label: "My movies", link: "/my/movies" },
       { label: "My reviews", link: "/my/reviews" },

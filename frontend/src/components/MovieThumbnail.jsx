@@ -13,17 +13,20 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import StarIcon from '@mui/icons-material/Star';
 import {deepOrange, red, grey} from "@mui/material/colors";
 import { Link } from "react-router-dom";
-import React, { useState  } from "react";
+import React, {useContext, useState} from "react";
 import axios from "axios";
+import {AuthContext} from "../App";
 
 function MovieThumbnail(props) {
+    const loginUser = useContext(AuthContext);
+
     const [state, setState] = useState({
         addToWatchlistSuccess: false,
         addToWatchlistError: null,
       });
       const handleAddToWatchlistClick = () => {
         const movieId = props.movie.movie_id; // Get the movieId from props
-        const userId = 1; // Replace this with the actual userId
+        const userId = loginUser.id; // Replace this with the actual userId
     
         axios
           .post(`/api/watchlists/${movieId}/${userId}`)

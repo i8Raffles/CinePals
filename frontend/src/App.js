@@ -8,14 +8,16 @@ export const AuthContext = React.createContext(null);
 
 function App() {
 
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [themeMode, setThemeMode] = useState('dark');
 
     const loginUser = (user) => {
+        localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
     }
 
     const signOutUser = () => {
+        localStorage.setItem("user", null);
         setUser(null);
     }
 
