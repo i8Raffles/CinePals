@@ -50,8 +50,9 @@ export function movieListReducer(state, action) {
                 searchCriteria: {
                     ...state.searchCriteria,
                     filter: action.payload,
+                    page: 1
                 },
-                page: 1,
+                loading: true
             };
         case ACTION_TYPES.NEXT_PAGE:
             const nextPage = state.searchCriteria.page + 1;
