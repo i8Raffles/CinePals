@@ -14,7 +14,18 @@ const theme = createTheme({
       //   contrastText: 'rgba(0, 0, 0, 0.87)',
       // },
     },
-    // contrastThreshold: 4.5,
+    components: {
+        MuiCardHeader: {
+            styleOverrides: {
+                root: {
+                    width: '100%'
+                },
+                content: {
+                    width: '100%'
+                }
+            }
+        },
+    }
   });
 
   export default theme;

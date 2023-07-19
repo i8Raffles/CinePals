@@ -61,11 +61,12 @@ function MovieThumbnail(props) {
             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">{props.movie.name[0]}</Avatar>
         } title={props.movie.name} subheader={props.movie.releaseDate}/> */}
         <CardHeader
-        sx={{ whiteSpace: "nowrap" }}
+        sx={{ whiteSpace: "nowrap", width: '100%' }}
         title={
           <Typography
             variant="h6"
-            sx={{ fontSize: "16px", lineHeight: "1.2", maxHeight: "2.4em", overflow: "hidden", textOverflow: "ellipsis" }}
+            noWrap
+            sx={{ fontSize: "16px", lineHeight: "1.2", maxHeight: "2.4em", overflow: "hidden", width: '100%', textOverflow: "ellipsis" }}
             title={props.movie.name} // Show full title on hover
           >
             {props.movie.name}
