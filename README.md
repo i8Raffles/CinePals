@@ -4,15 +4,15 @@ CinePals is an application that allows you to browse movies at your leisure. We 
 
 ## Screenshots
 
-![Home Page]()
-![Home Page - Genres]()
-![Movie Details]()
-![Search Feature]()
-![My Profile]()
-![My Movies]()
-![My Reviews]()
-![My Follows]()
-![Home Page - Light Mode]()
+![Home Page](https://github.com/i8Raffles/final_project/blob/master/docs/home-page.PNG?raw=true)
+![Home Page - Genres](https://github.com/i8Raffles/final_project/blob/master/docs/genres.PNG?raw=true)
+![Movie Details](https://github.com/i8Raffles/final_project/blob/master/docs/movie-details.PNG?raw=true)
+![Search Feature](https://github.com/i8Raffles/final_project/blob/master/docs/search-feature.PNG?raw=true)
+![My Profile](https://github.com/i8Raffles/final_project/blob/master/docs/my-profile.PNG?raw=true)
+![My Movies](https://github.com/i8Raffles/final_project/blob/master/docs/my-movielist.PNG?raw=true)
+![My Reviews](https://github.com/i8Raffles/final_project/blob/master/docs/my-reviews.PNG?raw=true)
+![My Follows](https://github.com/i8Raffles/final_project/blob/master/docs/my-follows.PNG?raw=true)
+![Home Page(animation genre) - Light Mode](https://github.com/i8Raffles/final_project/blob/master/docs/home-page-lightmode.PNG?raw=true)
 
 
 ## Getting Started
