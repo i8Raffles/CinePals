@@ -53,10 +53,10 @@ From the project directory:
 - You can keep scrolling down to dynamically continue rendering more movies for each category.
 - There is a search bar on the top right as well where you can type a movie name, click enter and view various movies under those search parameters.
 - Clicking on a movie takes you to the movie details page where you can see more information about the movie including watching a trailer/teaser for that movie; if you are logged in, you can add that movie to your watchlist(this can be done from the home page as well!) and leave a review and/or rating on that movie.
-- If you are logged in, the top right user icon will have a drop down menu allowing you to navigate to your profile, movies, reviews and following pages
+- If you are logged in, the top right user icon will have a drop down menu allowing you to navigate to your profile, movies, reviews and following pages.
 - On your profile page, you can add a URL to update your avatar icon and also a small description about you.
 - On your My Movies page, you can view a list of all the movies you've added to your watchlist and also remove any should you choose to.
-- On your My Reviews page, you can see all the reviews and ratings you've given for movies and edit them if you'd like
+- On your My Reviews page, you can see all the reviews and ratings you've given for movies and edit them if want to.
 - From the Movie details page, if other users have left reviews, you can click on any of their profile icons to go to their profile page and follow them. Once you do so, your My Follows page will be updated with those profile names and clicking that will allow you to check out each of those users movie list and reviews.
 
 
