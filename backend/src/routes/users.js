@@ -220,11 +220,6 @@ module.exports = db => {
       password
     } = request.body;
 
-    if (!userId || userId === 'undefined') {
-      response.status(401).send("Not authorized");
-      return;
-    }
-
     try {
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(password, saltRounds);
