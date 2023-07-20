@@ -26,7 +26,7 @@ function MovieThumbnail(props) {
       });
       const handleAddToWatchlistClick = () => {
         const movieId = props.movie.movie_id; // Get the movieId from props
-        const userId = loginUser.id; // Replace this with the actual userId
+        const userId = loginUser?.id; // Replace this with the actual userId
     
         axios
           .post(`/api/watchlists/${movieId}/${userId}`)

@@ -8,7 +8,7 @@ const useMyProfile = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
 
   const loginUser = useContext(AuthContext);
-  const userId = loginUser.id;
+  const userId = loginUser?.id;
 
   useEffect(() => {
     const fetchUserData = async () =>{

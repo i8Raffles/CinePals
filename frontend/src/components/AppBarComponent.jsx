@@ -67,7 +67,6 @@ function AppBarComponent(props) {
     const [searchText, setSearchText] = React.useState('');
     const navigate = useNavigate();
 
-
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -77,6 +76,12 @@ function AppBarComponent(props) {
         if (setting === "Login") {
             return navigate("/login");
         }
+    };
+
+    const handleSignoutUser = () => {
+        localStorage.setItem("user", null);
+        props.signOutUser();
+        return navigate("/login");
     };
 
     const user = useContext(AuthContext);
@@ -167,7 +172,7 @@ function AppBarComponent(props) {
                                 aria-label="log out"
                                 aria-haspopup="true"
                                 color="inherit"
-                                onClick={props.signOutUser}
+                                onClick={handleSignoutUser}
                                 sx={{p: 0, ml: 3}}>
                                 <LogoutRounded />
                             </IconButton>

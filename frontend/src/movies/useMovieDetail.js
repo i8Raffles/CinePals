@@ -7,7 +7,7 @@ const useMovieDetail = (movieId) => {
   console.log("in useMovieDetail, movieId is ", movieId);
 
   const user = useContext(AuthContext);
-  const userId = user.id;
+  const userId = user?.id;
 
   const [state, setState] = useState({
     movie: {},

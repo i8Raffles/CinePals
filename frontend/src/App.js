@@ -3,8 +3,11 @@ import AppRouter from "./Router";
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from "./theme/mainTheme";
 import {ThemeProvider} from "@mui/material";
+import {addAuthHandlerToAxios} from "./utils/authHttpHandler";
 
 export const AuthContext = React.createContext(null);
+
+addAuthHandlerToAxios();
 
 function App() {
 
@@ -17,7 +20,6 @@ function App() {
     }
 
     const signOutUser = () => {
-        localStorage.setItem("user", null);
         setUser(null);
     }
 

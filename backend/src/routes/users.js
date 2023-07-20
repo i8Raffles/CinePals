@@ -22,6 +22,12 @@ module.exports = db => {
 
   router.get("/users/:userId", (request, response) => {
     const userId = request.params.userId;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     db.query(`
       SELECT 
       users.id,
@@ -53,6 +59,12 @@ module.exports = db => {
   router.patch("/users/:userId", (request, response) => {
     const userId = request.params.userId;
     const { description, avatarUrl } = request.body;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     db.query(`
       UPDATE users
       SET profile_description = $1, profile_url = $2
@@ -69,6 +81,12 @@ module.exports = db => {
   //Get following users by userId
   router.get("/follows/:userId", (request, response) => {
     const userId = request.params.userId;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     db.query(`
       SELECT 
       users.id,
@@ -95,6 +113,12 @@ module.exports = db => {
   router.patch("/follows/:userId/:followId", (request, response) => {
     const userId = request.params.userId;
     const followId = request.params.followId;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     db.query(`
       UPDATE followers
       SET follow_state = FALSE
@@ -115,6 +139,11 @@ module.exports = db => {
     const userId = request.params.userId;
     const followId = request.params.followId;
     console.log("in add follow post ", userId, followId);
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
     
     db.query(
       `SELECT COUNT(*) FROM followers WHERE user_id = $1 AND following_id = $2`,
@@ -161,6 +190,7 @@ module.exports = db => {
     const userId = request.params.userId;
     const followId = request.params.followId;
     // Query the database to check the follow status
+
     db.query(
       `SELECT follow_state FROM followers WHERE user_id = $1 AND following_id = $2`,[userId, followId]
     )
@@ -189,6 +219,11 @@ module.exports = db => {
       profileDescription,
       password
     } = request.body;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
 
     try {
       const saltRounds = 10;

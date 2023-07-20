@@ -63,6 +63,12 @@ module.exports = db => {
     router.get("/reviews/:movieId/:userId", (request, response) => {
       const movieId = request.params.movieId;
       const userId = request.params.userId;
+
+      if (!userId || userId === 'undefined') {
+        response.status(401).send("Not authorized");
+        return;
+      }
+
       db.query(`
         SELECT 
         reviews.id,
@@ -82,6 +88,12 @@ module.exports = db => {
   //get reviews and movies by userId
   router.get("/myreviews/:userId", (request, response) => {
     const userId = request.params.userId;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     db.query(`
       SELECT 
       reviews.id,
@@ -130,6 +142,12 @@ module.exports = db => {
   router.post("/reviews/:movieId/:userId", async (request, response) => {
     const movieId = request.params.movieId;
     const userId = request.params.userId
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     const { newReview,newRating }  = request.body;
     console.log("add review: ", movieId, userId, newRating, newReview);
 

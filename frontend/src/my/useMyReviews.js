@@ -10,7 +10,7 @@ const useMyReviews = () => {
   });
 
   const user = useContext(AuthContext);
-  const userId = user.id;
+  const userId = user?.id;
 
   useEffect(() => {
     const fetchMyMovies = async () => {

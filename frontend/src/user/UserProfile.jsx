@@ -8,7 +8,7 @@ import {AuthContext} from "../App";
 function UserProfile() {
   const { userId } = useParams();
   const loginUser = useContext(AuthContext);
-  const loginUserId = loginUser.id;
+  const loginUserId = loginUser?.id;
   const { user, isFollowed, handleFollow, handleUnfollow } = useUserProfile(loginUserId, userId);
   
 

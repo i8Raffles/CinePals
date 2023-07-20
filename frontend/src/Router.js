@@ -35,9 +35,9 @@ const AppRouter = (props) => <BrowserRouter>
                     <Route element={<UserReviews />} path="user/:userId/reviews" />
                     <Route element={<UserFollows />} path="user/:userId/follows" />
                 </Route>
+                <Route path="/login" element={<UserLogin loginUser={props.loginUser} />} />
+                <Route path="/register" element={<UserRegistration />} />
             </Route>
-            <Route path="/login" element={<UserLogin loginUser={props.loginUser} />} />
-            <Route path="/register" element={<UserRegistration />} />
             <Route path="/" element={<Navigate to="/movies" />} />
         </Routes>
     </BrowserRouter>;

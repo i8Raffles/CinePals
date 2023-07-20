@@ -5,7 +5,7 @@ import {AuthContext} from "../App";
 const useMyFollows = () => {
   const [follows, setFollows] = useState([]);
   const loginUser = useContext(AuthContext);
-  const userId = loginUser.id;
+  const userId = loginUser?.id;
 
   const fetchFollows = async () => {
     try {

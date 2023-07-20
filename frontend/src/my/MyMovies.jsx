@@ -9,7 +9,7 @@ import {useContext} from "react";
 
 function MyMovies() {
   const loginUser = useContext(AuthContext);
-  const userId = loginUser.id;
+  const userId = loginUser?.id;
   const { state, deleteMovie } = useMyMovies(userId);
   
   const handleDelete = (userId, movieId) => {

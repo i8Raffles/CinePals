@@ -24,6 +24,12 @@ module.exports = db => {
   router.get("/watchlists/:movieId/:userId", (request, response) =>{
     const movieId = request.params.movieId;
     const userId = request.params.userId;
+
+    if (!userId || userId === 'undefined') {
+      response.status(401).send("Not authorized");
+      return;
+    }
+
     db.query(`
     SELECT *
     FROM watchlists
