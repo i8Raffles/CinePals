@@ -25,7 +25,7 @@ CinePals is an application that allows you to browse movies at your leisure. We 
 
 - Now to setup the database run `npm run reset`, which will create the tables and also add some initial data to it.
 
-- From a separate terminal do `npm install` in both the frontend and backend directories.
+- From a separate terminal run `npm install` in both the frontend and backend directories.
 
 - There may be a small issue installing a certain package on the frontend directory, if that happens you can use `npm i @mui/styles --force` to hopefully resolve that problem.
 
